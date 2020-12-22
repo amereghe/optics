@@ -1,8 +1,8 @@
 # optics
 Repository storing some optics material - e.g. synchrotron, HEBT, MADX macros, etc...
 
-# MAD-X file extensions
-Alphabetical order
+## MAD-X file extensions
+Extensions are given in alphabetical order
 
 | extension | description |
 | --------- | ----------- |
