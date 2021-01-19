@@ -24,3 +24,25 @@ addAperture(eleName): macro = {
    Install, element=eleName_EX, at= 0.5*eleName->L+  tmpD, from=eleName;
    ENDEDIT;
 };
+
+! save a .tfs file with linear optics functions in a specific column order
+saveOpticsTFS(fileName): macro = {
+   select,flag=twiss,clear;
+   select,flag=twiss,column=name,keyword,l,s,betx,alfx,bety,alfy,x,px,y,py,dx,dpx,dy,dpy,mux,muy;
+   if (is_thin>0) {
+      twiss,file="fileName_twiss_thin.tfs";
+   } else {
+      twiss,file="fileName_twiss.tfs";
+   };
+};
+
+! save a .tfs file with geometry infos (strengths, aperture, etc...) in a specific column order
+saveGeometryTFS(fileName): macro = {
+   select,flag=twiss,clear;
+   select,flag=twiss,column=name,keyword,l,s,kick,hkick,vkick,angle,k0l,k1l,k2l,apertype,aper_1,aper_2,aper_3,aper_4,apoff_1,apoff_2;
+   if (is_thin>0) {
+      twiss,file="fileName_geometry_thin.tfs";
+   } else {
+      twiss,file="fileName_geometry.tfs";
+   };
+};

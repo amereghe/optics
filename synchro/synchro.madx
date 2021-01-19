@@ -235,20 +235,7 @@ if (is_thin>0) {
 
 use,sequence=MUXL;
 
-select,flag=twiss,clear;
-select,flag=twiss,column=name,keyword,l,s,betx,alfx,bety,alfy,x,px,y,py,dx,dpx,dy,dpy,mux,muy;
-if (is_thin>0) {
-  twiss,file="injection_optics_thin.tfs";
-} else {
-  twiss,file="injection_optics.tfs";
-};
-
-select,flag=twiss,clear;
-select,flag=twiss,column=name,keyword,l,s,kick,hkick,vkick,angle,k0l,k1l,k2l,apertype,aper_1,aper_2,aper_3,aper_4,apoff_1,apoff_2;
-if (is_thin>0) {
-  twiss,file="injection_geometry_thin.tfs";
-} else {
-  twiss,file="injection_geometry.tfs";
-};
+exec, saveOpticsTFS(injection);
+exec, saveGeometryTFS(injection);
 
 ! show, beam%MUXL;
