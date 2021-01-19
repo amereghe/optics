@@ -21,7 +21,7 @@ is_extraction=0;
 title, "Sincrotrone CNAO";
 
 ! load macros:
-call, file="../macros.madx";
+call, file="../macros.cmdx";
 
 ! LEGGO I PARAMETRI DEI VARI MAGNETI
 call, file="Magneti.str";
