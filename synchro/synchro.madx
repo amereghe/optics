@@ -22,7 +22,7 @@ title, "Sincrotrone CNAO: Match del tune";
 
 ! LEGGO I PARAMETRI DEI VARI MAGNETI
 ! AM: the file should have a .opt extension (list of Ks)
-call, file="Magneti.txt";
+call, file="Magneti.str";
 
 !Azzero gli errori multipolari dei dipoli
 ! AM: file does not exist!
@@ -30,21 +30,21 @@ call, file="Magneti.txt";
 
 ! Definisco gli elementi del sincrotrone
 !call, file="cnao-elem-V2.def";
-call, file="cnao-elem-BDI-v3.def";
+call, file="cnao-elem-BDI-v3.ele";
 
 ! AM: overwrite the definition of some elements
-call, file="correct_elem_def.seq";
+call, file="correct_elem_def.ele";
 
 ! Definisco  l'anello come sequenza
 ! AM: the file should have a .seq extension
-call, file="cnao-seq.opt";
+call, file="synchro.seq";
 ! Definisco  l'anello come linea
 !call, file="cnao-line.opt";
 
 ! DEFINISCO I MULTIPOLI
 ! AM: which is the difference between the two?
-!call, file="multipoli.txt";
-!call, file="multipoli_2.txt";
+!call, file="multipoli.str";
+!call, file="multipoli_2.str";
 
 
 ! Definisco il tipo di fascio
@@ -55,14 +55,13 @@ beam, particle=proton, energy=1000, sequence=MUXL;
 
 
 !ridefinisco i K dei sestupoli
-! AM: this file should have a .opt/.madx extension
-call, file="sest.txt";
+call, file="sest.str";
 
 ! AM: install missing elements
 call, file="install_missing.seq";
 
 ! AM: apertures
-call, file="cnao.aper";
+call, file="synchro.aper";
 
 if ( is_carbon == 0 ) {
   ! kicks of protons
@@ -183,7 +182,7 @@ if (is_thin>0) {
   use,sequence=MUXL;
   makethin,sequence=MUXL,style=teapot,makedipedge=true;
   
-  call, file="thin_ks.opt";
+  call, file="thin_ks.str";
   
   ! ! sestupolar "error", to gain back chromatic effect of thick RBENDs
   ! ! flat machine, natural chroma, FINT=0.5, thick quads, thin bends with dipedge
