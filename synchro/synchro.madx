@@ -18,10 +18,9 @@ is_carbon=1;
 ! 1: extraction optics (p: 230 MeV; C: 400 MeV/c)
 is_extraction=0;
 
-title, "Sincrotrone CNAO: Match del tune";
+title, "Sincrotrone CNAO";
 
 ! LEGGO I PARAMETRI DEI VARI MAGNETI
-! AM: the file should have a .opt extension (list of Ks)
 call, file="Magneti.str";
 
 !Azzero gli errori multipolari dei dipoli
