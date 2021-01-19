@@ -1,0 +1,26 @@
+! A.Mereghetti, 2021-01-19
+! a file collecting MADX macros
+
+! general aperture outside MBs: 145 mm x 74 mm (centred in 0,0)
+!   wrap this aperture marker around thick elements;
+aper1=145E-3/2; ! [m]
+aper2=74E-3/2;  ! [m]
+aper3=0.0;      ! [m]
+aper4=0.0;      ! [m]
+CNAO_APE: MARKER, APERTYPE=RECTANGLE, APERTURE={aper1,aper2,aper3,aper4};
+! longitudinal shift of added apertures
+tmpD=0.0; ! [m]
+
+! add aperture markers upstream/downstream of a given element
+! NB: aperType and aper1,aper2,aper3,aper4 and offx,offy should be defined before calling the macro;
+addAperture(eleName): macro = {
+   eleName, APERTYPE=apeType, APERTURE={aper1,aper2,aper3,aper4}, APER_OFFSET={offx,offy};
+   eleName_EN: MARKER, APERTYPE=apeType, APERTURE={aper1,aper2,aper3,aper4}, APER_OFFSET={offx,offy};
+   eleName_EX: MARKER, APERTYPE=apeType, APERTURE={aper1,aper2,aper3,aper4}, APER_OFFSET={offx,offy};
+   SEQEDIT, sequence=MUXL;
+   Install, element=eleName_EN, at=-0.5*eleName->L-  tmpD, from=eleName;
+   Install, element=CNAO_APE  , at=-0.5*eleName->L-2*tmpD, from=eleName;
+   Install, element=CNAO_APE  , at= 0.5*eleName->L+2*tmpD, from=eleName;
+   Install, element=eleName_EX, at= 0.5*eleName->L+  tmpD, from=eleName;
+   ENDEDIT;
+};
