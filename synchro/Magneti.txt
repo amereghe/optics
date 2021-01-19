@@ -1,0 +1,44 @@
+! CORRETTORI ORIZZONTALI
+HK_S0 = 0.0 ;
+HK_S2 = 0.0 ;
+HK_S4 = 0.0 ;
+HK_S6 = 0.0 ;
+HK_S80 = 0.0 ;
+HK_S8 = 0.0 ;
+HK_S4 = 0.0 ;
+HK_SC0 = 0.0 ;
+HK_SC = 0.0 ;
+HK_SE = 0.0 ;
+! CORRETTORI VERTICALI
+VK_S1 = 0.0 ;
+VK_S3 = 0.0 ;
+VK_S5 = 0.0 ;
+VK_S7 = 0.0 ;
+VK_S9 = 0.0 ;
+VK_SB = 0.0 ;
+VK_SD = 0.0 ;
+VK_SF = 0.0 ;
+
+! Injection Bumper
+KBDI = 0.0;
+
+KACQ = 0.0 ;
+KSKQ = 0.0 ;
+
+
+
+
+KF= 0.312173*0.99636 ;
+KR= 0.498978*0.99636 ;
+KD= 0.535204*0.99636 ;
+S0= 0.552661 ;
+S1= 0.916171 ;
+SR= 5.54828 ;
+
+
+
+
+KF= 0.312173 ;
+KR= 0.498978 ;
+KD= 0.535204 ;
+
