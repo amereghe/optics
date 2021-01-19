@@ -12,6 +12,6 @@ Extensions are given in alphabetical order
 | `.def`   | some definitions |
 | `.ele`   | definition of single elements |
 | `.madx`  | generic MAD-X script |
-| `.opt`   | magnet strengths for a specific optics |
+| `.opt`   | optical functions (e.g. starting conditions) |
 | `.seq`   | definition of sequence |
 | `.str`   | magnet strengths for a specific optics |
