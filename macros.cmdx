@@ -1,19 +1,18 @@
 ! A.Mereghetti, 2021-01-19
 ! a file collecting MADX macros
 
-! general aperture outside MBs: 145 mm x 74 mm (centred in 0,0)
-!   wrap this aperture marker around thick elements;
-aper1=145E-3/2; ! [m]
-aper2=74E-3/2;  ! [m]
-aper3=0.0;      ! [m]
-aper4=0.0;      ! [m]
+! general aperture outside magnets
+aper1=0.0; ! [m]
+aper2=0.0; ! [m]
+aper3=0.0; ! [m]
+aper4=0.0; ! [m]
 CNAO_APE: MARKER, APERTYPE=RECTANGLE, APERTURE={aper1,aper2,aper3,aper4};
 ! longitudinal shift of added apertures
 tmpD=0.0; ! [m]
 
 ! add aperture markers upstream/downstream of a given element
 ! NB: aperType and aper1,aper2,aper3,aper4 and offx,offy should be defined before calling the macro;
-addAperture(eleName): macro = {
+addAperture(eleName,apeType): macro = {
    eleName, APERTYPE=apeType, APERTURE={aper1,aper2,aper3,aper4}, APER_OFFSET={offx,offy};
    eleName_EN: MARKER, APERTYPE=apeType, APERTURE={aper1,aper2,aper3,aper4}, APER_OFFSET={offx,offy};
    eleName_EX: MARKER, APERTYPE=apeType, APERTURE={aper1,aper2,aper3,aper4}, APER_OFFSET={offx,offy};
@@ -47,3 +46,13 @@ saveGeometryTFS(fileName): macro = {
    };
 };
 
+! set beam rigidity and other realtivistic quantities based on beam energy
+setRigidity(): macro = {
+   ! input:
+   ! - Ek [MeV]: kinetic energy per nucleon;
+   ! - A0,Z0 []: nuclear mass, atomic number;
+   ! - m0 [GeV]: rest mass;
+   gammaRel=(Ek*1E-3*A0)/m0+1;
+   betaGammaRel=sqrt(gammaRel^2-1);
+   Brho=betaGammaRel*m0/(CLIGHT*1E-9*Z0);
+};
