@@ -1,5 +1,5 @@
-! extraction optics RFKO, 30mm, Carbon-12 ions
-! optics with 10-bumpers for orbit at extraction septum
+! get settings directly from spreadsheet used to generate magnet ramps
+! NB: optics with 10-bumpers for orbit at extraction septum
 
 Ek=EdipExtr;
 
@@ -8,7 +8,7 @@ KR=s2kextr;  !S2 [rad/m^-2]
 KF=s3kextr;  !S3 [rad/m^-2]
 KD=s4kextr;  !S4 [rad/m^-2]
 ! - injection bump
-Ibumper=0.0; ! [A] (by LFalbo)
+Ibumper=0.0; ! [A]
 ! - sextupoles: unique settings at injection
 Is_SR=S6;    ! S6, [A]
 Is_S1=S8;    ! S8, [A]
