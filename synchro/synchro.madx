@@ -98,7 +98,9 @@ exec, saveOpticsTFS(extraction);
 exec, saveGeometryTFS(extraction);
 
 ! ==============================================================================
-! loop through .csv file out of an excel for generating magnet ramps
+! specific tasks
 ! ==============================================================================
 
+! loop through .csv file out of an excel for generating magnet ramps
+! NB: you can comment out all the part concerning the simple example
 ! call, file="loopThroughGenRampFile.cmdx";
