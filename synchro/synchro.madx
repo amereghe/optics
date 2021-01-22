@@ -14,14 +14,11 @@ is_thin=0;
 ! 1: carbon optics
 is_carbon=1;
 
-! 0: injection optics
-! 1: extraction optics (p: 230 MeV; C: 400 MeV/c)
-is_extraction=0;
-
 title, "Sincrotrone CNAO";
 
 ! load macros:
 call, file="../macros.cmdx";
+call, file="macros.cmdx";
 
 ! LEGGO I PARAMETRI DEI VARI MAGNETI
 call, file="Magneti.str";
@@ -70,172 +67,38 @@ if ( is_carbon == 0 ) {
   A0=1;     ! []
   Z0=1;     ! []
   m0=PMASS; ! [GeV]
-  ! - vertical kicker (used to correct a non-zero orbit in ring):
-  ! VK_S1 = -0.75E-03; ! S1_005A_CSV, [rad]
-  if ( is_extraction == 0 ) {
-    Ek=7E-3;  ! [GeV]
-    ! - quads:
-    KR= 0.50153;  !S2 [rad/m^-2]
-    KF= 0.32105;  !S3 [rad/m^-2]
-    KD= 0.54108;  !S4 [rad/m^-2]
-    ! - injection bump
-    Ibumper=161.0; ! [A] (by LFalbo)
-    ! - sextupoles: unique settings at injection
-    Is_SR=0.0;   ! S6, [A]
-    Is_S1=0.5;   ! S8, [A]
-    Is_S0=0.5;   ! S9, [A]
-  } else {
-    ! 230 MeV, 320mm, for the time being...
-    Ek=230E-3;  ! [GeV]
-    ! - quads:
-    KR= 0.498978;    !S2 [rad/m^-2]
-    KF= 0.309545405; !S3 [rad/m^-2]
-    KD= 0.534009543; !S4 [rad/m^-2]
-    ! - injection bump
-    Ibumper=0.0; ! [A]
-    ! - sextupoles
-    Is_SR=96.0;   ! S6, [A]
-    Is_S1= 9.0;   ! S8, [A]
-    Is_S0=12.0;   ! S9, [A]
-  };
 } else {
   ! kicks of carbon ions
   A0=12;       ! []
   Z0=6;        ! []
   m0=A0*NMASS; ! [GeV]
-  ! - vertical kicker (used to correct a non-zero orbit in ring):
-  ! VK_S1 = -0.5E-03; ! S1_005A_CSV, [rad/m^-1]
-  if ( is_extraction == 0 ) {
-    Ek=A0*7E-3;  ! [GeV]
-    ! - quads:
-    KR= 0.46434056;  !S2 [rad/m^-2]
-    KF= 0.36225936;  !S3 [rad/m^-2]
-    KD= 0.52137384;  !S4 [rad/m^-2]
-    ! - injection bump
-    Ibumper=385.0; ! [A] (by LFalbo)
-    ! - sextupoles: unique settings at injection
-    Is_SR=0.0;   ! S6, [A]
-    Is_S1=0.5;   ! S8, [A]
-    Is_S0=0.5;   ! S9, [A]
-  } else {
-    ! 400 MeV, 270mm, for the time being...
-    Ek=A0*400E-3;  ! [GeV]
-    ! - quads:
-    KR= 0.49773;     !S2 [rad/m^-2]
-    KF= 0.309560893; !S3 [rad/m^-2]
-    KD= 0.533087194; !S4 [rad/m^-2]
-    ! - injection bump
-    Ibumper=0.0; ! [A]
-    ! - sextupoles
-    Is_SR=96.0;   ! S6, [A]
-    Is_S1= 9.0;   ! S8, [A]
-    Is_S0=12.0;   ! S9, [A]
-  };
 };
 
-! - 5-bumpers bump for extraction septum
-HK_S0  = -1.8648311E-03; ! S0_029A_CSH, [rad]
-HK_S2  =  0.6311951E-03; ! S2_008A_CSH, [rad]
-HK_SC0 =  0.589358E-03;  ! SC_008A_CSH, [rad]
-HK_SC  = -1.9651058E-03; ! SC_021A_CSH, [rad]
-HK_SE  =  0.9895835E-03; ! SE_016A_CSH, [rad]
+! ==============================================================================
+! a simple example
+! ==============================================================================
 
-! convert currents into kick
-gammaRel=Ek/m0+1;
-betaGammaRel=sqrt(gammaRel^2-1);
-Brho=betaGammaRel*m0/(CLIGHT*1E-9*Z0);
-! - injection bumper
-! BDI: 26.2T @ 500A over 0.303m;
-KBDI=-(2.62E-2*0.303/500.0)*Ibumper/Brho; ! both bumpers
-! bump is closed in ~25 turns:
-delay=0;
-fBump=1-delay/25.;
-KBDI=KBDI*fBump;
-KBDI_E=KBDI; ! bumper closing the bump (i.e. AFTER MSI)
-KBDI_S=KBDI; ! bumper opening the bump (i.e. BEFORE MSI)
-value, KBDI, KBDI_E, KBDI_S;
-! - sextupoles (Lmag reality: 0.259m):
-if ( is_extraction == 0 ) {
-  I_SR=Is_SR;   ! S6, [A]
-  I_S1=Is_S1;   ! S8, [A]
-  I_S0=Is_S0;   ! S9, [A]
-} else {
-  ! scale current by Brho;
-  ! ref is 60 MeV protons, i.e. Brho_ref=1.14276 Tm;
-  I_SR=Is_SR*Brho/1.14276;   ! S6, [A]
-  I_S1=Is_S1*Brho/1.14276;   ! S8, [A]
-  I_S0=Is_S0*Brho/1.14276;   ! S9, [A]
-};
-SR= (I_SR/9.4632)/Brho;     !S6, [A], CPriano's spreadsheet: I[A]=9.4632*g[T/m2];
-S1=-(I_S1/9.5142)/Brho;     !S8, [A], CPriano's spreadsheet: I[A]=9.5142*g[T/m2];
-S0=-(I_S0/9.5003)/Brho;     !S9, [A], CPriano's spreadsheet: I[A]=9.5003*g[T/m2];
-value, Is_SR, I_SR, SR;
-value, Is_S1, I_S1, S1;
-value, Is_S0, I_S0, S0;
-! SR=0.0; S0=0.0; S1=0.0;
+! set some additional beam properties
+exec, setRigidity();
 
-if (is_thin>0) {
-  ! makethin
-  select, flag=makethin, clear;
-  select, flag=makethin, pattern="MBS$",  slice=2, thick=false;
-  select, flag=makethin, pattern="QUS$",  slice=4;
-  ! select, flag=makethin, pattern="QUS$",  slice=1, thick=true;
-  ! select, flag=makethin, pattern="SXC$",  slice=2;
-  use,sequence=MUXL;
-  makethin,sequence=MUXL,style=teapot,makedipedge=true;
-  
-  call, file="thin_ks.str";
-  
-  ! ! sestupolar "error", to gain back chromatic effect of thick RBENDs
-  ! ! flat machine, natural chroma, FINT=0.5, thick quads, thin bends with dipedge
-  ! use,sequence=MUXL;
-  ! Match, sequence=MUXL;
-  ! ! global, dQ1 = -0.5528443479; ! (inj, protons)
-  ! ! global, dQ2 = -1.82597867;   ! (inj, protons)
-  ! global, dQ1 = -0.3714262884;  ! (inj, carbon ions) 
-  ! global, dQ2 = -1.524080085;   ! (inj, carbon ions)
-  ! vary, name=sestn1, step=0.001;
-  ! vary, name=sestn2, step=0.001;
-  ! LMDIF, CALLS=200, TOLERANCE=1e-17;
-  ! endmatch;
-  ! value, sestn1, sestn2;
+! load optics
+call, file="example.str";
 
-  ! ! rematch injection tune, flat machine, no sextupoles
-  ! use,sequence=MUXL;
-  ! Match, sequence=MUXL;
-  ! ! global, Q1 = 1.702799484; ! (inj, protons)
-  ! ! global, Q2 = 1.787839917; ! (inj, protons)
-  ! ! constraint, range=M1, DX=0.2978474152; ! (inj, protons)
-  ! global, Q1 = 1.740827989; ! (inj, carbon ions) 
-  ! global, Q2 = 1.708716703; ! (inj, carbon ions) 
-  ! constraint, range=M1, DX=2.113414378; ! (inj, carbon ions) 
-  ! vary, name=KF, step=0.001;
-  ! vary, name=KR, step=0.001;
-  ! vary, name=KD, step=0.001;
-  ! LMDIF, CALLS=50, TOLERANCE=1e-17;
-  ! endmatch;
-  ! value, kf, kr, kd;
-  
-  ! ! rematch injection chroma, flat machine
-  ! use,sequence=MUXL;
-  ! Match, sequence=MUXL;
-  ! ! global, dQ1 = -1.079044557; ! (inj, protons)
-  ! ! global, dQ2 = -1.322496137; ! (inj, protons)
-  ! global, dQ1 = -0.6383468392; ! (inj, carbon ions) 
-  ! global, dQ2 = -1.285197856; ! (inj, carbon ions) 
-  ! vary, name=S1, step=0.001;
-  ! vary, name=S0, step=0.001;
-  ! LMDIF, CALLS=200, TOLERANCE=1e-17;
-  ! endmatch;
-  ! value, s0, s1;
-  
-  ! value, S0_001A_MBS_DEN->H, S0_001A_MBS_DEN->E1, S0_001A_MBS_DEN->FINT, S0_001A_MBS_DEN->HGAP, S0_001A_MBS_DEN->TILT;
-  ! value, TeK0_EN->K1L, TeK0_EN->K2L;
-};
+! set injection bumper k from the specified current
+exec, I2K_InjBump(); ! input: Ibumper[A],Brho[Tm];
 
+! set sextupole families from the specified current
+exec, I2K_sextupoles_S6_SR(); ! input: Is_SR[A],Brho[Tm];
+exec, I2K_sextupoles_S8_S1(); ! input: Is_SR[A],Brho[Tm];
+exec, I2K_sextupoles_S9_S0(); ! input: Is_SR[A],Brho[Tm];
+
+! generate optics files
 use,sequence=MUXL;
+exec, saveOpticsTFS(extraction);
+exec, saveGeometryTFS(extraction);
 
-exec, saveOpticsTFS(injection);
-exec, saveGeometryTFS(injection);
+! ==============================================================================
+! loop through .csv file out of an excel for generating magnet ramps
+! ==============================================================================
 
-! show, beam%MUXL;
+! call, file="loopThroughGenRampFile.cmdx";
