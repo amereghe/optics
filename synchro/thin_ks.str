@@ -1,0 +1,37 @@
+if ( is_carbon == 0 ) {
+   ! kicks of protons
+   if ( is_extraction == 0 ) {
+      ! injection
+
+      ! - quads:
+      kf=0.3206505932;
+      kr=0.5006663888;
+      kd=0.5405828852;
+      
+      ! - sextupoles:
+      s1=-0.1371708622;
+      s0=-0.1379651291;
+      
+      ! - correction of RBEND chromatic effect (sextupole component)
+      sestn1=-0.05469033034;
+      sestn2= 0.04775628682;
+   };
+} else {
+   ! kicks of carbon ions
+   if ( is_extraction == 0 ) {
+      ! injection
+
+      ! - quads:
+      kf= 0.361687582 ;
+      kr=0.4636164376 ;
+      kd=0.5208359468 ;
+
+      ! - sextupoles:
+      s0=-0.06698864672 ;
+      s1=-0.06915495867 ;
+
+      ! - correction of RBEND chromatic effect (sextupole component)
+      sestn1=-0.06593020526 ;
+      sestn2= 0.05719509406 ;
+   };
+};
