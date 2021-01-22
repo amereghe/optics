@@ -1,0 +1,29 @@
+! extraction optics RFKO, 30mm, Carbon-12 ions
+! optics with 10-bumpers for orbit at extraction septum
+
+Ek=EdipExtr;
+
+! - quads:
+KR=s2kextr;  !S2 [rad/m^-2]
+KF=s3kextr;  !S3 [rad/m^-2]
+KD=s4kextr;  !S4 [rad/m^-2]
+! - injection bump
+Ibumper=0.0; ! [A] (by LFalbo)
+! - sextupoles: unique settings at injection
+Is_SR=S6;    ! S6, [A]
+Is_S1=S8;    ! S8, [A]
+Is_S0=S9;    ! S9, [A]
+
+! - usual 5-bumpers bump for extraction septum
+HK_S0  = S0_29FT*1.0E-03; ! S0_029A_CSH, [rad]
+HK_S2  = S2_08FT*1.0E-03; ! S2_008A_CSH, [rad]
+HK_SC0 = SC_08FT*1.0E-03; ! SC_008A_CSH, [rad]
+HK_SC  = SC_21FT*1.0E-03; ! SC_021A_CSH, [rad]
+HK_SE  = SE_16FT*1.0E-03; ! SE_016A_CSH, [rad]
+! - additional 5-bumpers bump for extraction septum
+HK_S4  = S4_08FT*1.0E-03; ! S4_008A_CSH, [rad]
+HK_S6  = S6_14FT*1.0E-03; ! S6_014A_CSH, [rad]
+HK_S80 = S8_08FT*1.0E-03; ! S8_008A_CSH, [rad]
+HK_S8  = S8_35FT*1.0E-03; ! S8_035A_CSH, [rad]
+HK_SA  = SA_08FT*1.0E-03; ! SA_008A_CSH, [rad]
+
