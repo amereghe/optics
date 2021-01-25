@@ -54,7 +54,7 @@ k_fin=KD;
 exec, saveOpticsTFS(extraction_matched);
 exec, saveGeometryTFS(extraction_matched);
 
-assign, echo="k.txt";
+assign, echo="ks.txt";
 PRINTF, TEXT="%.12f %.12f", VALUE= k_ini,k_fin;
 n = n+1;
 assign, echo=terminal;
