@@ -2,7 +2,7 @@
 
 % template analysis script
 % - include Matlab library
-pathToLibrary="D:\VMs\vb_share\repos\MatLabTools";
+pathToLibrary="..\..\..\MatLabTools";
 addpath(genpath(pathToLibrary));
 opticsFileName="..\extraction_optics.tfs";
 geometryFileName="..\extraction_geometry.tfs";
