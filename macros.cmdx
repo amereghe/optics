@@ -1,19 +1,18 @@
 ! A.Mereghetti, 2021-01-19
 ! a file collecting MADX macros
 
-! general aperture outside MBs: 145 mm x 74 mm (centred in 0,0)
-!   wrap this aperture marker around thick elements;
-aper1=145E-3/2; ! [m]
-aper2=74E-3/2;  ! [m]
-aper3=0.0;      ! [m]
-aper4=0.0;      ! [m]
+! general aperture outside magnets
+aper1=0.0; ! [m]
+aper2=0.0; ! [m]
+aper3=0.0; ! [m]
+aper4=0.0; ! [m]
 CNAO_APE: MARKER, APERTYPE=RECTANGLE, APERTURE={aper1,aper2,aper3,aper4};
 ! longitudinal shift of added apertures
 tmpD=0.0; ! [m]
 
 ! add aperture markers upstream/downstream of a given element
 ! NB: aperType and aper1,aper2,aper3,aper4 and offx,offy should be defined before calling the macro;
-addAperture(eleName): macro = {
+addAperture(eleName,apeType): macro = {
    eleName, APERTYPE=apeType, APERTURE={aper1,aper2,aper3,aper4}, APER_OFFSET={offx,offy};
    eleName_EN: MARKER, APERTYPE=apeType, APERTURE={aper1,aper2,aper3,aper4}, APER_OFFSET={offx,offy};
    eleName_EX: MARKER, APERTYPE=apeType, APERTURE={aper1,aper2,aper3,aper4}, APER_OFFSET={offx,offy};
@@ -26,23 +25,60 @@ addAperture(eleName): macro = {
 };
 
 ! save a .tfs file with linear optics functions in a specific column order
+! please specify if the sequence is in thin or thick lens (is_thin<>0).
+! in case of an open line (e.g. a transfer line, the gantry, etc...), use
+!    initial conditions to linear optics functions (flagged as initial).
 saveOpticsTFS(fileName): macro = {
    select,flag=twiss,clear;
    select,flag=twiss,column=name,keyword,l,s,betx,alfx,bety,alfy,x,px,y,py,dx,dpx,dy,dpy,mux,muy;
-   if (is_thin>0) {
-      twiss,file="fileName_twiss_thin.tfs";
+   if (is_open<>0) {
+      ! a transfer line: we need the initial conditions
+      if (is_thin>0) {
+         twiss,file=fileName_optics_thin.tfs, beta0=initial;
+      } else {
+         twiss,file=fileName_optics.tfs, beta0=initial;
+      };
    } else {
-      twiss,file="fileName_twiss.tfs";
+      ! a ring: optics is computed as self-consisten solution
+      if (is_thin>0) {
+         twiss,file=fileName_optics_thin.tfs;
+      } else {
+         twiss,file=fileName_optics.tfs;
+      };
    };
 };
 
 ! save a .tfs file with geometry infos (strengths, aperture, etc...) in a specific column order
+! please specify if the sequence is in thin or thick lens (is_thin<>0).
+! in case of an open line (e.g. a transfer line, the gantry, etc...), use
+!    initial conditions to linear optics functions (flagged as initial).
 saveGeometryTFS(fileName): macro = {
    select,flag=twiss,clear;
    select,flag=twiss,column=name,keyword,l,s,kick,hkick,vkick,angle,k0l,k1l,k2l,apertype,aper_1,aper_2,aper_3,aper_4,apoff_1,apoff_2;
-   if (is_thin>0) {
-      twiss,file="fileName_geometry_thin.tfs";
+   if (is_open<>0) {
+      ! a transfer line: we need the initial conditions
+      if (is_thin>0) {
+         twiss,file=fileName_geometry_thin.tfs, beta0=initial;
+      } else {
+         twiss,file=fileName_geometry.tfs, beta0=initial;
+      };
    } else {
-      twiss,file="fileName_geometry.tfs";
+      ! a ring: optics is computed as self-consisten solution
+      if (is_thin>0) {
+         twiss,file=fileName_geometry_thin.tfs;
+      } else {
+         twiss,file=fileName_geometry.tfs;
+      };
    };
+};
+
+! set beam rigidity and other realtivistic quantities based on beam energy
+setRigidity(): macro = {
+   ! input:
+   ! - Ek [MeV]: kinetic energy per nucleon;
+   ! - A0,Z0 []: nuclear mass, atomic number;
+   ! - m0 [GeV]: rest mass;
+   gammaRel=(Ek*1E-3*A0)/m0+1;
+   betaGammaRel=sqrt(gammaRel^2-1);
+   Brho=betaGammaRel*m0/(CLIGHT*1E-9*Z0);
 };
