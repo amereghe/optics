@@ -14,4 +14,4 @@ optics = ParseTfsTable(opticsFileName,'optics');
 geometry = ParseTfsTable(geometryFileName,'geometry');
 
 % show the optics
-showOptics(optics,geometry,"RFKO - Carbon - 270 mm",Laccel,Qx,Qy,Chrx,Chry);
+ShowOptics(optics,geometry,"RFKO - Carbon - 270 mm",Laccel,Qx,Qy,Chrx,Chry);
