@@ -34,16 +34,16 @@ saveOpticsTFS(fileName): macro = {
    if (is_open<>0) {
       ! a transfer line: we need the initial conditions
       if (is_thin>0) {
-         twiss,file=fileName_optics_thin.tfs, beta0=initial;
+         twiss, rmatrix=true, file=fileName_optics_thin.tfs, beta0=initial;
       } else {
-         twiss,file=fileName_optics.tfs, beta0=initial;
+         twiss, rmatrix=true, file=fileName_optics.tfs, beta0=initial;
       };
    } else {
       ! a ring: optics is computed as self-consisten solution
       if (is_thin>0) {
-         twiss,file=fileName_optics_thin.tfs;
+         twiss, rmatrix=true, file=fileName_optics_thin.tfs;
       } else {
-         twiss,file=fileName_optics.tfs;
+         twiss, rmatrix=true, file=fileName_optics.tfs;
       };
    };
 };
@@ -58,17 +58,33 @@ saveGeometryTFS(fileName): macro = {
    if (is_open<>0) {
       ! a transfer line: we need the initial conditions
       if (is_thin>0) {
-         twiss,file=fileName_geometry_thin.tfs, beta0=initial;
+         twiss, rmatrix=true, file=fileName_geometry_thin.tfs, beta0=initial;
       } else {
-         twiss,file=fileName_geometry.tfs, beta0=initial;
+         twiss, rmatrix=true, file=fileName_geometry.tfs, beta0=initial;
       };
    } else {
       ! a ring: optics is computed as self-consisten solution
       if (is_thin>0) {
-         twiss,file=fileName_geometry_thin.tfs;
+         twiss, rmatrix=true, file=fileName_geometry_thin.tfs;
       } else {
-         twiss,file=fileName_geometry.tfs;
+         twiss, rmatrix=true, file=fileName_geometry.tfs;
       };
+   };
+};
+
+! save an apic.txt file
+! please specify if the sequence is in thin or thick lens (is_thin<>0).
+! in case of an open line (e.g. a transfer line, the gantry, etc...), use
+!    initial conditions to linear optics functions (flagged as initial).
+saveAPIC(): macro = {
+   select,flag=twiss,clear;
+   select,flag=twiss,COLUMN=NAME, KEYWORD, L, TILT, ANGLE, E1, E2, K1L, K2L, K3L, KS;
+   if (is_open<>0) {
+      ! a transfer line: we need the initial conditions
+      twiss, rmatrix=true, file=apic.txt, beta0=initial;
+   } else {
+      ! a ring: optics is computed as self-consisten solution
+      twiss, rmatrix=true, file=apic.txt;
    };
 };
 
@@ -81,4 +97,32 @@ setRigidity(): macro = {
    gammaRel=(Ek*1E-3*A0)/m0+1;
    betaGammaRel=sqrt(gammaRel^2-1);
    Brho=betaGammaRel*m0/(CLIGHT*1E-9*Z0);
+};
+
+! save Rmatrix at specific element
+! NB: please remember to use and twiss your sequence beforehand, e.g.:
+!     use, sequence=gantry;
+!     twiss, table=twiss, rmatrix=true, beta0=initial; 
+save_RMatrix(eleName): macro = {
+  REMOVEFILE, FILE="Rmatrix.txt";
+  assign, echo="Rmatrix.txt";
+  PRINTF, TEXT="#  | % 23.0f % 23.0f % 23.0f % 23.0f % 23.0f % 23.0f", VALUE=1,2,3,4,5,6;
+  PRINTF, TEXT="#--|------------------------------------------------------------------------------------------------------------------------------------------------", VALUE=0;
+  n=1;
+  WHILE (n<=6) {
+    exec, save_RMatrix_iLine(eleName,$n);
+    n=n+1;
+  };
+  assign, echo=terminal;
+};
+
+save_RMatrix_iLine(eleName,iLine): macro = {
+  PRINTF, TEXT="%2.0f | % 23.16E % 23.16E % 23.16E % 23.16E % 23.16E % 23.16E",
+      VALUE=iLine,table(twiss,eleName,reiLine1),table(twiss,eleName,reiLine2),table(twiss,eleName,reiLine3),
+                  table(twiss,eleName,reiLine4),table(twiss,eleName,reiLine5),table(twiss,eleName,reiLine6);
+};
+
+show_kIVals_element(eleName): macro = {
+  tmpK0=eleName->ANGLE/eleName->L;
+  PRINTF, TEXT=eleName % 24.16E % 24.16E % 24.16E % 24.16E, VALUE=tmpK0,tmpK0*Brho,eleName->K1,eleName->K1*Brho;
 };
