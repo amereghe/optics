@@ -1,0 +1,59 @@
+! overwrite general aperture marker outside magnets
+! general aperture outside MBs: 145 mm x 74 mm (centred in 0,0)
+!   wrap this aperture marker around thick elements;
+aper1=145E-3/2; ! [m]
+aper2=74E-3/2;  ! [m]
+aper3=0.0;      ! [m]
+aper4=0.0;      ! [m]
+CNAO_APE: MARKER, APERTYPE=RECTANGLE, APERTURE={aper1,aper2,aper3,aper4};
+
+I2K_InjBump(): macro = {
+    ! From C.Priano, email to A.Mereghetti, Fri 23/10/2020 09:36
+    !    Dalle misure di Danfisik ho trovato solo questo dato:
+    !    I=500 A
+    !    Bcent=2.62E-02mT
+    !    Leff=303mm
+    !    Non ho trovato la curva B(I), mi spiace.
+    !    Cristiana
+    ! --> hence:            BDI ref: 26.2T @ 500A over 0.303m;
+    ! input:
+    ! - Ibumper [A];
+    ! - Brho [Tm];
+    KBDI=-(2.62E-2*0.303/500.0)*Ibumper/Brho; ! both bumpers
+    KBDI_E=KBDI; ! bumper closing the bump (i.e. AFTER MSI)
+    KBDI_S=KBDI; ! bumper opening the bump (i.e. BEFORE MSI)
+    ! value, KBDI, KBDI_E, KBDI_S;
+};
+
+I2K_sextupoles_S6_SR: macro = {
+    ! S6 family
+    ! input:
+    ! - Is_SR [A];
+    ! - Brho [Tm];
+    ! ref is 60 MeV protons, i.e. Brho_ref=1.14276 Tm;
+    I_SR=Is_SR*Brho/1.14276;   ! [A]
+    SR= (I_SR/9.4632)/Brho;    ! [A], CPriano's spreadsheet: I[A]=9.4632*g[T/m2];
+    ! value, Is_SR, I_SR, SR;
+};
+
+I2K_sextupoles_S8_S1: macro = {
+    ! S8 family
+    ! input:
+    ! - Is_S1 [A];
+    ! - Brho [Tm];
+    ! ref is 60 MeV protons, i.e. Brho_ref=1.14276 Tm;
+    I_S1=Is_S1*Brho/1.14276;   ! [A]
+    S1=-(I_S1/9.5142)/Brho;    ! [A], CPriano's spreadsheet: I[A]=9.5142*g[T/m2];
+    ! value, Is_S1, I_S1, S1;
+};
+
+I2K_sextupoles_S9_S0: macro = {
+    ! S9 family
+    ! input:
+    ! - Is_S0 [A];
+    ! - Brho [Tm];
+    ! ref is 60 MeV protons, i.e. Brho_ref=1.14276 Tm;
+    I_S0=Is_S0*Brho/1.14276;   ! [A]
+    S0=-(I_S0/9.5003)/Brho;    ! [A], CPriano's spreadsheet: I[A]=9.5003*g[T/m2];
+    ! value, Is_S0, I_S0, S0;
+};
