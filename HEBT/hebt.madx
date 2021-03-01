@@ -1,0 +1,64 @@
+! AM, 2021-01-03
+! template files from SSavazzi and CPriano
+
+Option, warn=true, info=true, echo=true;
+
+! 0: closed beam line (ie a ring)
+! 1: open beam line
+is_open=1;
+
+! 0: proton optics
+! 1: carbon optics
+is_carbon=1;
+
+! 0: initial conditions at entrance of ESE
+! 1: initial conditions at entrance of S0-016A-MSP (synchro seq)
+!    / H2-001A-MSN (HEBT seq)
+start_cond=1;
+
+title, "HEBT CNAO";
+
+call, file=../macros.cmdx;
+call, file=macros.cmdx;
+
+! load desired HEBT
+call, file=LineT.seq;
+
+! load desired optics
+call, file=kqinit30mmCarb.str;
+
+! load initial conditions
+call, file=start-conditions.opt;
+
+! ==============================================================================
+! Definisco il tipo di fascio
+! ==============================================================================
+
+! AM: set crazy energies, otherwise dispersion will be divided by beta_rel...
+beam, particle=proton, energy=1000, sequence=APICLS009;
+
+if ( is_carbon == 0 ) {
+  ! kicks of protons
+  A0=1;     ! []
+  Z0=1;     ! []
+  m0=PMASS; ! [GeV]
+} else {
+  ! kicks of carbon ions
+  A0=12;       ! []
+  Z0=6;        ! []
+  m0=A0*NMASS; ! [GeV]
+};
+Ek=400.0; ! [MeV/n] kinetic energy per nucleon
+
+! set some additional beam properties, i.e. gammaRel, betaGammaRel, betaRel
+!   and Brho based on Ek, A0, Z0, m0;
+exec, setRigidity();
+
+! ==============================================================================
+! a simple example
+! ==============================================================================
+
+! generate optics files
+use,sequence=APICLS009;
+exec, saveOpticsTFS(LineT);
+exec, saveGeometryTFS(LineT);

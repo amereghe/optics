@@ -1,0 +1,23 @@
+! convert current into K, using a fifth order polynomial
+I2K_HEBT_QUs_fifth(MagName,biro) : macro {
+  ! the macro expects IMagName, KMagName and FMagName to be defined
+  ! eg. QH2_012A -> IQH2_012A, KQH2_012A, FQH2_012A
+  KMagName = (-2.794551e-1
+               +9.32005e-2   *abs(IMagName)
+               -4.26890e-4   *abs(IMagName)^2
+               +3.498485e-6  *abs(IMagName)^3
+               -1.1996845e-8 *abs(IMagName)^4
+               +1.3348656E-11*abs(IMagName)^5) /biro *abs(FMagName);
+  if (IMagName<0){ KMagName=-KMagName; };
+};
+
+! convert current into K, using a linear dependence
+I2K_HEBT_QUs_lin(MagName,biro) : macro {
+  ! the macro expects IMagName, KMagName and FMagName to be defined
+  ! eg. QH2_012A -> IQH2_012A, KQH2_012A, FQH2_012A
+  ! gradiente integrato GL(T) = 3.258e-02 * I (A)
+  ! lq = 0.45 m
+  ! fromItoK = GL/(lq*Bro) 
+  KMagName := 0.03258/(0.45*biro) *abs(IMagName) *abs(FMagName);
+  if (IMagName<0){ KMagName=-KMagName; };
+};
