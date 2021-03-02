@@ -18,6 +18,5 @@ I2K_HEBT_QUs_lin(MagName,biro) : macro {
   ! gradiente integrato GL(T) = 3.258e-02 * I (A)
   ! lq = 0.45 m
   ! fromItoK = GL/(lq*Bro) 
-  KMagName := 0.03258/(0.45*biro) *abs(IMagName) *abs(FMagName);
-  if (IMagName<0){ KMagName=-KMagName; };
+  KMagName := 0.03258/(0.45*biro) *IMagName *abs(FMagName);
 };
