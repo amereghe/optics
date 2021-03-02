@@ -9,8 +9,8 @@ if ( start_cond==1 ) {
       bety = 3.9421,
       alfy = 0.752,
       dx = 0.34, !0.328
-      dpx = 0,
-      dy = 3.4,
+      dpx = 0.,
+      dy = 0.,
       dpy = 0.;
 } else {
    ! queste sono le funzioni ottiche all'entrata del setto elettrostatico
