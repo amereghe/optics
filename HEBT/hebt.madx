@@ -48,7 +48,7 @@ if ( is_carbon == 0 ) {
   Z0=6;        ! []
   m0=A0*NMASS; ! [GeV]
 };
-Ek=400.0; ! [MeV/n] kinetic energy per nucleon
+Ek=115.23; ! [MeV/n] kinetic energy per nucleon
 
 ! set some additional beam properties, i.e. gammaRel, betaGammaRel, betaRel
 !   and Brho based on Ek, A0, Z0, m0;
