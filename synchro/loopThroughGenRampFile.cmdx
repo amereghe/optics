@@ -3,6 +3,7 @@
 !    is needed to a specific family to distort Q1 by a given amount
 
 ! set reference K0 of main bends (possible matching)
+! NB: K0MB defined in cnao-elem-BDI-v3.ele
 K0MB_ref=K0MB;
 ! remove output file
 REMOVEFILE, FILE="ks.txt";
@@ -18,7 +19,7 @@ n=Nstart;
 WHILE (n <= Nstop ) {
 
 SETVARS, TABLE=table_settings, ROW=n;
-call, file="settings_from_table.str";
+call, file="settings_from_rampGen_table.str";
 K0MB=K0MB_ref;
 
 ! notify user where we are
