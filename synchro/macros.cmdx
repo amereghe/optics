@@ -26,7 +26,7 @@ I2K_InjBump(): macro = {
 };
 
 I2K_sextupoles_S6_SR: macro = {
-    ! S6 family
+    ! S6 family, P6-011A-LPOW, CNAO2
     ! input:
     ! - Is_SR [A];
     ! - Brho [Tm];
@@ -37,7 +37,7 @@ I2K_sextupoles_S6_SR: macro = {
 };
 
 I2K_sextupoles_S8_S1: macro = {
-    ! S8 family
+    ! S8 family, P6-013A-LPOW, EEI
     ! input:
     ! - Is_S1 [A];
     ! - Brho [Tm];
@@ -48,7 +48,7 @@ I2K_sextupoles_S8_S1: macro = {
 };
 
 I2K_sextupoles_S9_S0: macro = {
-    ! S9 family
+    ! S9 family, P6-014A-LPOW, CNAO2
     ! input:
     ! - Is_S0 [A];
     ! - Brho [Tm];
@@ -57,3 +57,4 @@ I2K_sextupoles_S9_S0: macro = {
     S0=-(I_S0/9.5003)/Brho;    ! [A], CPriano's spreadsheet: I[A]=9.5003*g[T/m2];
     ! value, Is_S0, I_S0, S0;
 };
+
