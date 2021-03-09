@@ -1,0 +1,27 @@
+! From SSavazzi, 20/11/2020
+! Carbon
+
+if ( start_cond==1 ) {
+   ! valori delle funzioni ottiche in S0_009
+   initial: BETA0,
+      betx = 9.071,
+      alfx = 0.2187,
+      bety = 3.9421,
+      alfy = 0.752,
+      dx = 0.34, !0.328
+      dpx = 0.,
+      dy = 0.,
+      dpy = 0.;
+} else {
+   ! queste sono le funzioni ottiche all'entrata del setto elettrostatico
+   ! con i quads
+   initial: BETA0,
+      betx =  16.39911089,
+      alfx =  0.3973440887, 
+      bety = 7.416320667,
+      alfy =-0.2366364614,
+      dx=  -4.145743565,  
+      dpx=  0.5944134851,
+      dy = 0.,
+      dpy = 0.;
+};

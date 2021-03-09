@@ -91,11 +91,12 @@ saveAPIC(): macro = {
 ! set beam rigidity and other realtivistic quantities based on beam energy
 setRigidity(): macro = {
    ! input:
-   ! - Ek [MeV]: kinetic energy per nucleon;
+   ! - Ek [MeV/n]: kinetic energy per nucleon;
    ! - A0,Z0 []: nuclear mass, atomic number;
    ! - m0 [GeV]: rest mass;
    gammaRel=(Ek*1E-3*A0)/m0+1;
    betaGammaRel=sqrt(gammaRel^2-1);
+   betaRel=betaGammaRel/gammaRel;
    Brho=betaGammaRel*m0/(CLIGHT*1E-9*Z0);
 };
 
