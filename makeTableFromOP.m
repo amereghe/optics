@@ -154,15 +154,15 @@ function exportMADXtable(FileName,title,bigTable,headers,headerTypes)
     writeMADXHeaderLine(fileID,"TIME",datestr(T,'hh.mm.ss'));
     % - column names
     fprintf(fileID,"*");
-    fprintf(fileID,"\t%-18s",headers);
+    fprintf(fileID," %-18s",strrep(headers(:),"-","_"));
     fprintf(fileID,"\n");
     % - column types
     fprintf(fileID,"$");
-    fprintf(fileID,"\t%-18s",headerTypes);
+    fprintf(fileID," %-18s",headerTypes);
     fprintf(fileID,"\n");
     % - actual data
     for ii=1:size(bigTable,1)
-        fprintf(fileID,"\t%-18.10g",bigTable(ii,:));
+        fprintf(fileID," %-18.10g",bigTable(ii,:));
         fprintf(fileID,"\n");
     end
     fclose(fileID);
