@@ -11,7 +11,7 @@ KF= 0.310799584692491;  !S3 [rad/m^-2]
 KD= 0.533820775612604;  !S4 [rad/m^-2]
 ! - air core quad:
 KACQ=0.0;               !  [rad/m^-2]
-! - tune kicker (S8_024A_SKQ)
+! - skew quad (S8_024A_SKQ)
 KSKQ=0.0;               !  [rad/m^-2]
 
 ! - sextupoles:
