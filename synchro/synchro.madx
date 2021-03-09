@@ -99,8 +99,14 @@ exec, saveGeometryTFS(extraction);
 
 ! ==============================================================================
 ! specific tasks
+! NB: you can comment out all the part concerning the simple example
 ! ==============================================================================
 
-! loop through .csv file out of an excel for generating magnet ramps
-! NB: you can comment out all the part concerning the simple example
+! loop through .txt file out of an excel for generating magnet ramps
 ! call, file="loopThroughGenRampFile.cmdx";
+
+! loop through .tfx file out of the repo with currents
+! call, file="loopThroughLGENFile.cmdx";
+
+! save strengths
+exec, save_strengths(myOptics.str);
