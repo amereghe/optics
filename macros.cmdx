@@ -100,6 +100,23 @@ setRigidity(): macro = {
    Brho=betaGammaRel*m0/(CLIGHT*1E-9*Z0);
 };
 
+setBeam(mySequence): macro = {
+   ! AM: set crazy energies, otherwise dispersion will be divided by beta_rel...
+   beam, particle=proton, energy=1000, sequence=mySequence;
+   
+   if ( is_carbon == 0 ) {
+     ! kicks of protons
+     A0=1;     ! []
+     Z0=1;     ! []
+     m0=PMASS; ! [GeV]
+   } else {
+     ! kicks of carbon ions
+     A0=12;       ! []
+     Z0=6;        ! []
+     m0=A0*NMASS; ! [GeV]
+   };
+};
+
 ! save Rmatrix at specific element
 ! NB: please remember to use and twiss your sequence beforehand, e.g.:
 !     use, sequence=gantry;

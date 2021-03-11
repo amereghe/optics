@@ -37,20 +37,9 @@ call, file=start-conditions.opt;
 ! Definisco il tipo di fascio
 ! ==============================================================================
 
-! AM: set crazy energies, otherwise dispersion will be divided by beta_rel...
-beam, particle=proton, energy=1000, sequence=APICLS009;
+! caratteristiche particella e MADX beam command
+exec, setBeam(APICLS009);
 
-if ( is_carbon == 0 ) {
-  ! kicks of protons
-  A0=1;     ! []
-  Z0=1;     ! []
-  m0=PMASS; ! [GeV]
-} else {
-  ! kicks of carbon ions
-  A0=12;       ! []
-  Z0=6;        ! []
-  m0=A0*NMASS; ! [GeV]
-};
 Ek=115.23; ! [MeV/n] kinetic energy per nucleon
 
 ! set some additional beam properties, i.e. gammaRel, betaGammaRel, betaRel
