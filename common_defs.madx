@@ -1,0 +1,6 @@
+! infos about synchro MBS (used also by HEBT)
+ANGLEMB = 0.3926990817;
+LMB = 1.6772;
+K0MB = ANGLEMB / LMB;
+Es = ANGLEMB /2. ;
+

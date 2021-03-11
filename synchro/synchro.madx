@@ -20,6 +20,9 @@ title, "Sincrotrone CNAO";
 call, file="../macros.cmdx";
 call, file="macros.cmdx";
 
+! load common defs
+call, file="../common_defs.madx";
+
 ! LEGGO I PARAMETRI DEI VARI MAGNETI
 call, file="Magneti.str";
 

@@ -21,6 +21,9 @@ title, "HEBT CNAO";
 call, file=../macros.cmdx;
 call, file=macros.cmdx;
 
+! load common defs
+call, file=../common_defs.madx;
+
 ! load desired HEBT
 call, file=LineT.seq;
 
