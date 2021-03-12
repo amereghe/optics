@@ -27,30 +27,38 @@ call, file=../common_defs.madx;
 ! load desired HEBT
 call, file=LineT.seq;
 
-! load desired optics
-call, file=kqinit30mmCarb.str;
-
 ! load initial conditions
 call, file=start-conditions.opt;
 
-! ==============================================================================
-! Definisco il tipo di fascio
-! ==============================================================================
-
-! caratteristiche particella e MADX beam command
+! Definisco il tipo di fascio (caratteristiche particella e
+!    MADX beam command)
 exec, setBeam(APICLS009);
-
-Ek=115.23; ! [MeV/n] kinetic energy per nucleon
-
-! set some additional beam properties, i.e. gammaRel, betaGammaRel, betaRel
-!   and Brho based on Ek, A0, Z0, m0;
-exec, setRigidity();
 
 ! ==============================================================================
 ! a simple example
 ! ==============================================================================
 
+! load desired optics
+call, file=kqinit30mmCarb.str;
+
+Ek=62.58434; ! [MeV/n] kinetic energy per nucleon
+Bp=30; ! [mm] Bragg peak depth
+
+! set some additional beam properties, i.e. gammaRel, betaGammaRel, betaRel
+!   and Brho based on Ek, A0, Z0, m0;
+exec, setRigidity();
+
 ! generate optics files
 use,sequence=APICLS009;
 exec, saveOpticsTFS(LineT);
 exec, saveGeometryTFS(LineT);
+
+! ==============================================================================
+! specific tasks
+! NB: you can comment out all the part concerning the simple example
+! ==============================================================================
+
+! loop through .tfs file out of the repo with currents
+! call, file="loopThroughLGENFile.cmdx";
+
+exec, save_strengths(lineT.str);
