@@ -1,0 +1,84 @@
+! get settings directly from spreadsheet of LGEN
+
+! For every magnet MagName we have IMagName, KMagName and FMagName
+! eg. QH2_012A:
+! - IQH2_012A: current [A];
+! - KQH2_012A: kick [1/m^2];
+! - FQH2_012A: multiplication factor of K(I) (includes sign!)
+
+Ek=Ek_MeVN;  ! [MeV/n]
+BP=range_mm; ! [mm] 
+exec, setRigidity();
+
+! 30 mm 
+IQH2_012A := P7_008A_LGEN_A;      !H8
+FQH2_012A := 1.0;     
+IQH2_016A := -P7_009A_LGEN_A;     !H9
+FQH2_016A := 1.0;  
+IQH2_022A := P7_010A_LGEN_A;      !H10
+FQH2_022A := 1.0;  
+!
+IQH4_003A := P7_011A_LGEN_A;      !H11
+FQH4_003A := 1.0;         
+IQH4_007A := -P7_012A_LGEN_A;     !H12     
+FQH4_007A := 1.0;          
+IQH4_013A := P7_013A_LGEN_A;      !H13
+FQH4_013A := 1.0;      
+!
+IQH5_005A := -P7_014A_LGEN_A;     !H14  
+FQH5_005A := 1.0;      
+IQH5_009A := P7_015A_LGEN_A;      !H15    
+FQH5_009A := 1.0;      
+IQH5_015A := -P7_015A_LGEN_A;     !H16   
+FQH5_015A := 1.0;     
+!
+IQT1_004A := P8_004A_LGEN_A;      !H36 
+FQT1_004A := 1.0;      
+IQT1_013A := -P8_005A_LGEN_A;     !H18
+FQT1_013A := 1.0;    
+IQT1_019A := P8_006A_LGEN_A;      !H19
+FQT1_019A := 1.0;     
+!
+IQT2_005A := -P8_007A_LGEN_A;     !H20
+FQT2_005A := 1.0;    
+IQT2_012A := P8_008A_LGEN_A;      !H21
+FQT2_012A := 1.0;
+IQT2_018A := -P8_007A_LGEN_A;     !H22
+FQT2_018A := 1.0;
+
+
+! use macro: linear
+exec, I2K_HEBT_QUs_lin(QH2_012A,Brho);
+exec, I2K_HEBT_QUs_lin(QH2_016A,Brho);
+exec, I2K_HEBT_QUs_lin(QH2_022A,Brho);
+exec, I2K_HEBT_QUs_lin(QH4_003A,Brho);
+exec, I2K_HEBT_QUs_lin(QH4_007A,Brho);
+exec, I2K_HEBT_QUs_lin(QH4_013A,Brho);
+exec, I2K_HEBT_QUs_lin(QH5_005A,Brho);
+exec, I2K_HEBT_QUs_lin(QH5_009A,Brho);
+exec, I2K_HEBT_QUs_lin(QH5_015A,Brho);
+exec, I2K_HEBT_QUs_lin(QT1_004A,Brho);
+exec, I2K_HEBT_QUs_lin(QT1_013A,Brho);
+exec, I2K_HEBT_QUs_lin(QT1_019A,Brho);
+exec, I2K_HEBT_QUs_lin(QT2_005A,Brho);
+exec, I2K_HEBT_QUs_lin(QT2_012A,Brho);
+exec, I2K_HEBT_QUs_lin(QT2_018A,Brho);
+
+/*
+! use macro: fifth order polynomial
+exec, I2K_HEBT_QUs_fifth(QH2_012A,Brho);
+exec, I2K_HEBT_QUs_fifth(QH2_016A,Brho);
+exec, I2K_HEBT_QUs_fifth(QH2_022A,Brho);
+exec, I2K_HEBT_QUs_fifth(QH4_003A,Brho);
+exec, I2K_HEBT_QUs_fifth(QH4_007A,Brho);
+exec, I2K_HEBT_QUs_fifth(QH4_013A,Brho);
+exec, I2K_HEBT_QUs_fifth(QH5_005A,Brho);
+exec, I2K_HEBT_QUs_fifth(QH5_009A,Brho);
+exec, I2K_HEBT_QUs_fifth(QH5_015A,Brho);
+exec, I2K_HEBT_QUs_fifth(QT1_004A,Brho);
+exec, I2K_HEBT_QUs_fifth(QT1_013A,Brho);
+exec, I2K_HEBT_QUs_fifth(QT1_019A,Brho);
+exec, I2K_HEBT_QUs_fifth(QT2_005A,Brho);
+exec, I2K_HEBT_QUs_fifth(QT2_012A,Brho);
+exec, I2K_HEBT_QUs_fifth(QT2_018A,Brho);
+*/
