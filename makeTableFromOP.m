@@ -9,7 +9,7 @@ MADXFileName="synchro\TM_Protons.tfs";
 RampGen2MADX(rampFileName,MADXFileName);
 
 % RFKO, Carbon
-rampFileName="synchro\KmachinephotoCarbRFKO.xlsx";
+rampFileName="S:\Accelerating-System\Accelerator-data\Area dati MD\00Rampe\MatlabRampGen2.8\INPUT\KmachinephotoCarbRFKO.xlsx";
 rampSheetName="Foglio1";
 MADXFileName="synchro\KmachinephotoCarbRFKO.tfs";
 RampGen2MADX(rampFileName,MADXFileName,rampSheetName);
