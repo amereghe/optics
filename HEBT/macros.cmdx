@@ -21,6 +21,18 @@ I2K_HEBT_QUs_lin(MagName,biro) : macro {
   KMagName := 0.03258/(0.45*biro) *IMagName *abs(FMagName);
 };
 
+I2K_HEBT_CEBH(MagName,biro): macro {
+  ! from SSavazzi, relation for MADbuilder
+  ! the macro expects IMagName, KMagName and FMagName to be defined
+  KMagName := 2.615E-5-3.385E-4*IMagName*abs(FMagName);
+};
+
+I2K_HEBT_CEBV(MagName,biro): macro {
+  ! from SSavazzi, relation for MADbuilder
+  ! the macro expects IMagName, KMagName and FMagName to be defined
+  KMagName := 2.981E-5-3.385E-4*IMagName*abs(FMagName);
+};
+
 save_strengths_particular(): macro {
    print, TEXT="";
    print, TEXT="! main dipole strengths [rad/m]";
@@ -42,4 +54,51 @@ save_strengths_particular(): macro {
    value, KQT2_005A;
    value, KQT2_012A;
    value, KQT2_018A;
+};
+
+compute_RM(myName,myKickField,myI2K): macro = {
+  imyName=currI;
+  kmyName_orig=myName->myKickField;
+  fmyName=1.0;
+
+  exec, myI2K(myName,Brho);
+  ! value, myName->myKickField;
+  myName->myKickField=kmyName;
+  ! value, myName->myKickField;
+  
+  use,sequence=APICLS009;
+  select,flag=twiss,clear;
+  twiss, beta0=initial;
+  xNZL=table(twiss,t2_030b_nzl,x);
+  yNZL=table(twiss,t2_030b_nzl,y);
+  xISO=table(twiss,t2_032a_mob,x);
+  yISO=table(twiss,t2_032a_mob,y);
+  ! value, myName->HKICK;
+  ! value, myName->VKICK;
+
+  ! reset original kick
+  ! value, myName->myKickField;
+  myName->myKickField=kmyName_orig;
+  ! value, myName->myKickField;
+};
+
+compute_RM_currents(magName): macro ={
+   currI=Imin;
+   while (currI<=Imax) {
+      exec, compute_RM(magName,HKICK,I2K_HEBT_CEBH);
+      xhNZL=xNZL;
+      yhNZL=yNZL;
+      xhISO=xISO;
+      yhISO=yISO;
+      exec, compute_RM(magName,VKICK,I2K_HEBT_CEBV);
+      xvNZL=xNZL;
+      yvNZL=yNZL;
+      xvISO=xISO;
+      yvISO=yISO;
+      assign, echo=magName_RM.txt;
+      PRINTF, TEXT="% .12f % .12f % .12f % .12f % .12f % .12f % .12f % .12f % .12f % .12f",
+              VALUE=Brho, currI, xhISO, yhISO, xhNZL, yhNZL, xvISO, yvISO, xvNZL, yvNZL;
+      assign, echo=terminal;
+      currI=currI+Istep;
+   };
 };
