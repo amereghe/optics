@@ -9,7 +9,7 @@ K0MB_ref=K0MB;
 REMOVEFILE, FILE="ks.txt";
 
 ! parse table
-READTABLE, file="KmachinephotoCarbRFKO.txt", table=table_settings;
+READTABLE, file="KmachinephotoCarbRFKO.tfs", table=table_settings;
 lunghezza=table(table_settings,tablelength);
 ! first data line is 1 (i.e. .txt header is skipped)
 Nstart=1;
