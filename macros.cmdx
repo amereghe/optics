@@ -98,6 +98,7 @@ setRigidity(): macro = {
    betaGammaRel=sqrt(gammaRel^2-1);
    betaRel=betaGammaRel/gammaRel;
    Brho=betaGammaRel*m0/(CLIGHT*1E-6*Z0);
+   ! value, Ek, A0, m0, gammaRel, betaGammaRel, betaRel, Brho;
 };
 
 setBeam(mySequence): macro = {
