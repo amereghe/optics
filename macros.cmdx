@@ -154,4 +154,5 @@ save_strengths(fileName): macro = {
    value, Ek;
    value, Bp;
    exec, save_strengths_particular();
+   assign, echo=terminal;
 };
