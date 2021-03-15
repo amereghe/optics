@@ -3,6 +3,7 @@
 ! S3_012A_BDI and SD_012A_BDI are set by Ibumper;
 
 Ek=EdipExtr;
+BP=BP_mm;
 
 ! - quads:
 KR=s2kextr;  !S2 [rad/m^-2]
