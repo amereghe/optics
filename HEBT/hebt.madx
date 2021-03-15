@@ -61,4 +61,7 @@ exec, saveGeometryTFS(LineT);
 ! loop through .tfs file out of the repo with currents
 ! call, file="loopThroughLGENFile.cmdx";
 
+! compute response matrices
+! call, file="compute_RM.cmdx";
+
 exec, save_strengths(lineT.str);
