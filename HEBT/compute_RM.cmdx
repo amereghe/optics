@@ -8,8 +8,8 @@
 ! nElements=table(table_elements,tablelength);
 
 ! set reference K0 of main bends (possible matching)
-! NB: K0MB defined in cnao-elem-BDI-v3.ele
-K0MB_ref=K0MB;
+! NB: K0MB defined in ../common_defs.madx
+! K0MB_ref=K0MB;
 
 ! parse table
 READTABLE, file="Protoni_Sala3_2021-02-13.tfs", table=table_settings;
@@ -20,9 +20,9 @@ lunghezzaLGEN=table(table_settings,tablelength);
 ! NNstart=nElements-1;
 ! NNstop=nElements;
 
-Imin=-10; ! [A]
-Imax=10;  ! [A]
-Istep=5;  ! [A]
+Imin=-5; ! [A]
+Imax=5;  ! [A]
+Istep=1;  ! [A]
 
 NEnLevelstart=1;
 NEnLevelstop=lunghezzaLGEN;
