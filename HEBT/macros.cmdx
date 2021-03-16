@@ -96,8 +96,8 @@ compute_RM_currents(magName): macro ={
       xvISO=xISO;
       yvISO=yISO;
       assign, echo=magName_RM.txt;
-      PRINTF, TEXT="% .12f % .12f % .12f % .12f % .12f % .12f % .12f % .12f % .12f % .12f",
-              VALUE=Brho, currI, xhISO, yhISO, xhNZL, yhNZL, xvISO, yvISO, xvNZL, yvNZL;
+      PRINTF, TEXT="%14.12f %5.1f % 7.3f % 15.12f % 15.12f % 15.12f % 15.12f % 15.12f % 15.12f % 15.12f % 15.12f",
+              VALUE=Brho, BP, currI, xhISO, yhISO, xhNZL, yhNZL, xvISO, yvISO, xvNZL, yvNZL;
       assign, echo=terminal;
       currI=currI+Istep;
    };
