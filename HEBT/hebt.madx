@@ -62,6 +62,7 @@ exec, saveGeometryTFS(LineT);
 ! call, file="loopThroughLGENFile.cmdx";
 
 ! compute response matrices
+! call, file=kqinit30mmCarb.str;
 ! call, file="compute_RM.cmdx";
 
 exec, save_strengths(lineT.str);
