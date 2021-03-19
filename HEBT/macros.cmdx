@@ -24,13 +24,15 @@ I2K_HEBT_QUs_lin(MagName,biro) : macro {
 I2K_HEBT_CEBH(MagName,biro): macro {
   ! from SSavazzi, relation for MADbuilder
   ! the macro expects IMagName, KMagName and FMagName to be defined
-  KMagName := 2.615E-5-3.385E-4*IMagName*abs(FMagName);
+  ! Lmag=0.52m;
+  KMagName := ((2.615E-5-3.385E-4*IMagName)/biro*0.52)*abs(FMagName);
 };
 
 I2K_HEBT_CEBV(MagName,biro): macro {
   ! from SSavazzi, relation for MADbuilder
   ! the macro expects IMagName, KMagName and FMagName to be defined
-  KMagName := 2.981E-5-3.385E-4*IMagName*abs(FMagName);
+  ! Lmag=0.52m;
+  KMagName := ((2.981E-5-3.385E-4*IMagName)/biro*0.52)*abs(FMagName);
 };
 
 save_strengths_particular(): macro {
@@ -69,12 +71,40 @@ compute_RM(myName,myKickField,myI2K): macro = {
   use,sequence=APICLS009;
   select,flag=twiss,clear;
   twiss, beta0=initial;
-  xNZL=table(twiss,t2_030b_nzl,x);
-  yNZL=table(twiss,t2_030b_nzl,y);
-  xISO=table(twiss,t2_032a_mob,x);
-  yISO=table(twiss,t2_032a_mob,y);
+  if (iLine==1) {
+    xSFH=table(twiss,t2_021b_sfh,x);
+    ySFH=table(twiss,t2_021b_sfh,y);
+    xNZL=table(twiss,t2_030b_nzl,x);
+    yNZL=table(twiss,t2_030b_nzl,y);
+    xISO=table(twiss,t2_032a_mob,x);
+    yISO=table(twiss,t2_032a_mob,y);
+  }elseif(iLine==2) {
+    xSFH=table(twiss,u2_019b_sfh,x);
+    ySFH=table(twiss,u2_019b_sfh,y);
+    xNZL=table(twiss,u2_027b_nzl,x);
+    yNZL=table(twiss,u2_027b_nzl,y);
+    xISO=table(twiss,u2_029a_mob,x);
+    yISO=table(twiss,u2_029a_mob,y);
+  }elseif(iLine==3) {
+    xSFH=table(twiss,v2_019b_sfh,x);
+    ySFH=table(twiss,v2_019b_sfh,y);
+    xNZL=table(twiss,v2_029b_nzl,x);
+    yNZL=table(twiss,v2_029b_nzl,y);
+    xISO=table(twiss,v2_031a_mob,x);
+    yISO=table(twiss,v2_031a_mob,y);
+  }elseif(iLine==4) {
+    xSFH=table(twiss,z2_021b_sfh,x);
+    ySFH=table(twiss,z2_021b_sfh,y);
+    xNZL=table(twiss,z2_030b_nzl,x);
+    yNZL=table(twiss,z2_030b_nzl,y);
+    xISO=table(twiss,z2_032a_mob,x);
+    yISO=table(twiss,z2_032a_mob,y);
+  };
   ! value, myName->HKICK;
   ! value, myName->VKICK;
+  
+  ! use,sequence=APICLS009;
+  ! exec, saveOptics(myName_myKickField);
 
   ! reset original kick
   ! value, myName->myKickField;
@@ -82,22 +112,68 @@ compute_RM(myName,myKickField,myI2K): macro = {
   ! value, myName->myKickField;
 };
 
+parseTable(): macro={
+   if (iLine==1) {
+      READTABLE, file="Protoni_Sala3_2021-02-13.tfs", table=table_settings;
+   }elseif (iLine==2) {
+      READTABLE, file="Protoni_Sala2H_2021-02-13.tfs", table=table_settings;
+   }elseif (iLine==3) {
+      READTABLE, file="Protoni_Sala2V_2021-02-13.tfs", table=table_settings;
+   }elseif (iLine==4) {
+      READTABLE, file="Protoni_Sala1_2021-02-13.tfs", table=table_settings;
+   };
+};
+
+saveOptics(additional): macro={
+  if (iLine==1) {
+      exec, saveOpticsTFS(LineT_additional);
+      exec, saveGeometryTFS(LineT_additional);
+   }elseif (iLine==2) {
+      exec, saveOpticsTFS(LineU_additional);
+      exec, saveGeometryTFS(LineU_additional);
+   }elseif (iLine==3) {
+      exec, saveOpticsTFS(LineV_additional);
+      exec, saveGeometryTFS(LineV_additional);
+   }elseif (iLine==4) {
+      exec, saveOpticsTFS(LineZ_additional);
+      exec, saveGeometryTFS(LineZ_additional);
+   };
+};
+
+saveStrengths(additional): macro={
+  if (iLine==1) {
+      exec, save_strengths(LineT_additional);
+   }elseif (iLine==2) {
+      exec, save_strengths(LineU_additional);
+   }elseif (iLine==3) {
+      exec, save_strengths(LineV_additional);
+   }elseif (iLine==4) {
+      exec, save_strengths(LineZ_additional);
+   };
+};
+
 compute_RM_currents(magName): macro ={
    currI=Imin;
    while (currI<=Imax) {
       exec, compute_RM(magName,HKICK,I2K_HEBT_CEBH);
+      xhSFH=xSFH;
+      yhSFH=ySFH;
       xhNZL=xNZL;
       yhNZL=yNZL;
       xhISO=xISO;
       yhISO=yISO;
+      kickh=kmagName;
       exec, compute_RM(magName,VKICK,I2K_HEBT_CEBV);
+      xvSFH=xSFH;
+      yvSFH=ySFH;
       xvNZL=xNZL;
       yvNZL=yNZL;
       xvISO=xISO;
       yvISO=yISO;
+      kickv=kmagName;
       assign, echo=magName_RM.txt;
-      PRINTF, TEXT="%14.12f %5.1f % 7.3f % 15.12f % 15.12f % 15.12f % 15.12f % 15.12f % 15.12f % 15.12f % 15.12f",
-              VALUE=Brho, BP, currI, xhISO, yhISO, xhNZL, yhNZL, xvISO, yvISO, xvNZL, yvNZL;
+      PRINTF, TEXT="% 19.12E % 6.1f % 8.3f % 19.12E % 19.12E % 19.12E % 19.12E % 19.12E % 19.12E % 19.12E % 19.12E % 19.12E % 19.12E % 19.12E % 19.12E % 19.12E % 19.12E",
+              VALUE=Brho, BP, currI, kickh, kickv, xhISO, yhISO, xhNZL, yhNZL, xhSFH, yhSFH, xvISO, yvISO, xvNZL, yvNZL, xvSFH, yvSFH;
       assign, echo=terminal;
       currI=currI+Istep;
    };
@@ -111,19 +187,18 @@ compute_RM_allCurrents(magName): macro={
       
       SETVARS, TABLE=table_settings, ROW=nEnLevel;
       K0MB=K0MB_ref;
-      ! call, file="settings_from_LGEN_table.str";
-      Ek=Ek_MeVN*1.0;  ! [MeV/n]
-      BP=range_mm; ! [mm] 
-      exec, setRigidity();
+      call, file="settings_from_LGEN_table.str";
+      ! Ek=Ek_MeVN*1.0;  ! [MeV/n]
+      ! BP=range_mm; ! [mm] 
+      ! exec, setRigidity();
       
       ! notify user where we are
+      PRINTF, TEXT="==========================================================================================",VALUE=0.0;
       PRINTF, TEXT="at Ek = %g MeV/u - BP = %g mm - row = %.0f ...", VALUE= Ek,BP,nEnLevel;
+      PRINTF, TEXT="==========================================================================================",VALUE=0.0;
       
-      ! use,sequence=APICLS009;
-      ! exec, saveOpticsTFS(LineT);
-      ! exec, saveGeometryTFS(LineT);
-
       exec, compute_RM_currents(magName);
+
       nEnLevel = nEnLevel+1;
    };
 };

@@ -16,6 +16,12 @@ is_carbon=1;
 !    / H2-001A-MSN (HEBT seq)
 start_cond=1;
 
+! 1: LineT, Room 3
+! 2: LineU, Room 2H
+! 3: LineV, Room 2V
+! 4: LineZ, Room 1
+iLine=1;
+
 title, "HEBT CNAO";
 
 call, file=../macros.cmdx;
@@ -25,7 +31,15 @@ call, file=macros.cmdx;
 call, file=../common_defs.madx;
 
 ! load desired HEBT
-call, file=LineT.seq;
+if (iLine==1) {
+   call, file=LineT.seq;
+}elseif(iLine==2) {
+   call, file=LineU.seq;
+}elseif(iLine==3) {
+   call, file=LineV.seq;
+}elseif(iLine==4) {
+   call, file=LineZ.seq;
+};
 
 ! load initial conditions
 call, file=start-conditions.opt;
@@ -50,8 +64,8 @@ exec, setRigidity();
 
 ! generate optics files
 use,sequence=APICLS009;
-exec, saveOpticsTFS(LineT);
-exec, saveGeometryTFS(LineT);
+exec, saveOptics(example);
+exec, saveStrengths(example);
 
 ! ==============================================================================
 ! specific tasks
@@ -62,7 +76,5 @@ exec, saveGeometryTFS(LineT);
 ! call, file="loopThroughLGENFile.cmdx";
 
 ! compute response matrices
-! call, file=kqinit30mmCarb.str;
 ! call, file="compute_RM.cmdx";
 
-exec, save_strengths(lineT.str);
