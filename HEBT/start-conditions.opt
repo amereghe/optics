@@ -29,12 +29,12 @@ if ( is_carbon==1 ) { ! Carbon
    if ( start_cond==1 ) {
       ! at entrance of S0-016A-MSP
       initial: BETA0,
-         betx = 8.889339404,
-         alfx = 0.204940124,
-         bety = 3.750216947,
-         alfy = 0.7012734338,
-         dx =-0.0001959307997,
-         dpx = 0.001415762997,
+         betx = 8.889735128,
+         alfx = 0.2064925619,
+         bety = 3.759425022,
+         alfy = 0.6917656608,
+         dx = 0.3556688701,
+         dpx =-0.003412163887,
          dy = 0.,
          dpy = 0.;
    } else {
