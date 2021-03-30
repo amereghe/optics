@@ -14,6 +14,10 @@ is_thin=0;
 ! 1: carbon optics
 is_carbon=1;
 
+! 0: TM
+! 1: RFKO
+mMode=0;
+
 title, "Sincrotrone CNAO";
 
 ! load macros:
@@ -83,6 +87,8 @@ exec, I2K_sextupoles_S9_S0(); ! input: Is_SR[A],Brho[Tm];
 use,sequence=MUXL;
 exec, saveOpticsTFS(extraction);
 exec, saveGeometryTFS(extraction);
+! save strengths
+exec, save_strengths(myOptics);
 
 ! ==============================================================================
 ! specific tasks
@@ -94,6 +100,3 @@ exec, saveGeometryTFS(extraction);
 
 ! loop through .tfs file out of the repo with currents
 ! call, file="loopThroughLGENFile.cmdx";
-
-! save strengths
-exec, save_strengths(myOptics.str);
