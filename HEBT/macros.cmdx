@@ -25,14 +25,29 @@ I2K_HEBT_CEBH(MagName,biro): macro {
   ! from SSavazzi, relation for MADbuilder
   ! the macro expects IMagName, KMagName and FMagName to be defined
   ! Lmag=0.52m;
-  KMagName := ((2.615E-5-3.385E-4*IMagName)/biro*0.52)*abs(FMagName);
+  ! KMagName := ((2.615E-5-3.385E-4*IMagName)/biro*0.52)*abs(FMagName);
+  !
+  ! Magnetic Measurements doc, 2007, performed on prototype
+  ! S:\Accelerating-System\Magnets\Magnetic Measurements\Frascati\HEBT\Documenti_misure_e_immagini\Correttori
+  ! BLh[Tm]=-1.76 10-4 * I [A] + 1.36 10-5
+  ! change sign: a negative vertical B-field (in both ref systems, i.e.
+  !    measurements and MADX) kicks positively-charged particles towards x>0 in MADX
+  KMagName :=-((-1.76E-4*IMagName + 1.36E-5)/biro)*abs(FMagName);
 };
 
 I2K_HEBT_CEBV(MagName,biro): macro {
   ! from SSavazzi, relation for MADbuilder
   ! the macro expects IMagName, KMagName and FMagName to be defined
   ! Lmag=0.52m;
-  KMagName := ((2.981E-5-3.385E-4*IMagName)/biro*0.52)*abs(FMagName);
+  ! KMagName := ((2.981E-5-3.385E-4*IMagName)/biro*0.52)*abs(FMagName);
+  !
+  ! Magnetic Measurements doc, 2007, performed on prototype
+  ! S:\Accelerating-System\Magnets\Magnetic Measurements\Frascati\HEBT\Documenti_misure_e_immagini\Correttori
+  ! BLv[Tm]=-1.76 10-4 * I [A] + 1.55 10-5
+  ! change sign: a negative horizontal B-field in measurements ref sys
+  !    corresponds to a positive horizontal B-field in MADX, which kicks
+  !    positively-charged particles towards y>0
+  KMagName :=-((-1.76E-4*IMagName + 1.55E-5)/biro)*abs(FMagName);
 };
 
 save_strengths_particular(): macro {
