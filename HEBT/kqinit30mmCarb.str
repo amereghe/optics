@@ -45,41 +45,41 @@ if (iLine==1) {
    FQT2_018A := 1.0;
    
    
-   ! use macro: linear
-   exec, I2K_HEBT_QUs_lin(QH2_012A,Bro);
-   exec, I2K_HEBT_QUs_lin(QH2_016A,Bro);
-   exec, I2K_HEBT_QUs_lin(QH2_022A,Bro);
-   exec, I2K_HEBT_QUs_lin(QH4_003A,Bro);
-   exec, I2K_HEBT_QUs_lin(QH4_007A,Bro);
-   exec, I2K_HEBT_QUs_lin(QH4_013A,Bro);
-   exec, I2K_HEBT_QUs_lin(QH5_005A,Bro);
-   exec, I2K_HEBT_QUs_lin(QH5_009A,Bro);
-   exec, I2K_HEBT_QUs_lin(QH5_015A,Bro);
-   exec, I2K_HEBT_QUs_lin(QT1_004A,Bro);
-   exec, I2K_HEBT_QUs_lin(QT1_013A,Bro);
-   exec, I2K_HEBT_QUs_lin(QT1_019A,Bro);
-   exec, I2K_HEBT_QUs_lin(QT2_005A,Bro);
-   exec, I2K_HEBT_QUs_lin(QT2_012A,Bro);
-   exec, I2K_HEBT_QUs_lin(QT2_018A,Bro);
-   
-/*
-   ! use macro: fifth order polynomial
-   exec, I2K_HEBT_QUs_fifth(QH2_012A,Bro);
-   exec, I2K_HEBT_QUs_fifth(QH2_016A,Bro);
-   exec, I2K_HEBT_QUs_fifth(QH2_022A,Bro);
-   exec, I2K_HEBT_QUs_fifth(QH4_003A,Bro);
-   exec, I2K_HEBT_QUs_fifth(QH4_007A,Bro);
-   exec, I2K_HEBT_QUs_fifth(QH4_013A,Bro);
-   exec, I2K_HEBT_QUs_fifth(QH5_005A,Bro);
-   exec, I2K_HEBT_QUs_fifth(QH5_009A,Bro);
-   exec, I2K_HEBT_QUs_fifth(QH5_015A,Bro);
-   exec, I2K_HEBT_QUs_fifth(QT1_004A,Bro);
-   exec, I2K_HEBT_QUs_fifth(QT1_013A,Bro);
-   exec, I2K_HEBT_QUs_fifth(QT1_019A,Bro);
-   exec, I2K_HEBT_QUs_fifth(QT2_005A,Bro);
-   exec, I2K_HEBT_QUs_fifth(QT2_012A,Bro);
-   exec, I2K_HEBT_QUs_fifth(QT2_018A,Bro);
-*/
+   if ( iMacro_I2K_QU==1 ) {
+     ! use macro: linear
+     exec, I2K_HEBT_QUs_lin(QH2_012A,Bro);
+     exec, I2K_HEBT_QUs_lin(QH2_016A,Bro);
+     exec, I2K_HEBT_QUs_lin(QH2_022A,Bro);
+     exec, I2K_HEBT_QUs_lin(QH4_003A,Bro);
+     exec, I2K_HEBT_QUs_lin(QH4_007A,Bro);
+     exec, I2K_HEBT_QUs_lin(QH4_013A,Bro);
+     exec, I2K_HEBT_QUs_lin(QH5_005A,Bro);
+     exec, I2K_HEBT_QUs_lin(QH5_009A,Bro);
+     exec, I2K_HEBT_QUs_lin(QH5_015A,Bro);
+     exec, I2K_HEBT_QUs_lin(QT1_004A,Bro);
+     exec, I2K_HEBT_QUs_lin(QT1_013A,Bro);
+     exec, I2K_HEBT_QUs_lin(QT1_019A,Bro);
+     exec, I2K_HEBT_QUs_lin(QT2_005A,Bro);
+     exec, I2K_HEBT_QUs_lin(QT2_012A,Bro);
+     exec, I2K_HEBT_QUs_lin(QT2_018A,Bro);
+   } elseif ( iMacro_I2K_QU==5 ) {
+     ! use macro: fifth order polynomial
+     exec, I2K_HEBT_QUs_fifth(QH2_012A,Bro);
+     exec, I2K_HEBT_QUs_fifth(QH2_016A,Bro);
+     exec, I2K_HEBT_QUs_fifth(QH2_022A,Bro);
+     exec, I2K_HEBT_QUs_fifth(QH4_003A,Bro);
+     exec, I2K_HEBT_QUs_fifth(QH4_007A,Bro);
+     exec, I2K_HEBT_QUs_fifth(QH4_013A,Bro);
+     exec, I2K_HEBT_QUs_fifth(QH5_005A,Bro);
+     exec, I2K_HEBT_QUs_fifth(QH5_009A,Bro);
+     exec, I2K_HEBT_QUs_fifth(QH5_015A,Bro);
+     exec, I2K_HEBT_QUs_fifth(QT1_004A,Bro);
+     exec, I2K_HEBT_QUs_fifth(QT1_013A,Bro);
+     exec, I2K_HEBT_QUs_fifth(QT1_019A,Bro);
+     exec, I2K_HEBT_QUs_fifth(QT2_005A,Bro);
+     exec, I2K_HEBT_QUs_fifth(QT2_012A,Bro);
+     exec, I2K_HEBT_QUs_fifth(QT2_018A,Bro);
+   };
 };
 
 return;

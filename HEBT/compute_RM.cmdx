@@ -1,24 +1,11 @@
-! //-----scrivo un file con solo correttori con la loro posizione (fine dell'elemento) e lo rileggo come tabella---------
-! // Credits: SSavazzi
-! SELECT,FLAG=twiss,clear;
-! SELECT,FLAG=twiss,PATTERN = "CEB$", column=keyword,name,s;
-! USE,sequence=APICLS009;
-! TWISS,file="mysave_elements", beta0=initial;
-! READTABLE, file="mysave_elements", table=table_elements;
-! nElements=table(table_elements,tablelength);
 
 ! set reference K0 of main bends (possible matching)
 ! NB: K0MB defined in ../common_defs.madx
-! K0MB_ref=K0MB;
+K0MB_ref=K0MB;
 
 ! parse table
 exec, parseTable();
 lunghezzaLGEN=table(table_settings,tablelength);
-
-! //-----------ciclo while per ciclare su tutti gli elementi della tabella---------------------
-! // Credits: SSavazzi
-! NNstart=nElements-1;
-! NNstop=nElements;
 
 Imin=-150.; ! [A]
 Imax=150.;  ! [A]
@@ -42,27 +29,3 @@ if (iLine==1) {
    exec, compute_RM_allCurrents(Z1_011A_CEB);
    exec, compute_RM_allCurrents(Z2_015A_CEB);
 };
-
-! nn=NNstart;
-! WHILE (nn <= NNstop) {
-!    ! loop through elements
-! 
-!    value, nn, NNstart, NNstop;
-!    PRINTF, TEXT="at element %.0f ...", VALUE= nn;
-!    
-!    SETVARS, TABLE=table_elements, ROW=nn;
-!    //indica la riga in cui ci si deve posizionare per leggere la tabella
-!    //(dalla tabella vengono fuori una stringa per la colonna NAME e un value per la colonna S)
-!    myName=NAME;
-!    ! REMOVEFILE, FILE=NAME_RM.txt;
-!    value, S;
-!    value, myName;
-!    print, TEXT=NAME;
-!    return;
-!    
-!    ! first LGEN data line is 1 (i.e. .txt header is skipped)
-!    NEnLevelstart=1;
-!    NEnLevelstop=1;
-! 
-!    nn = nn+1;
-! };
