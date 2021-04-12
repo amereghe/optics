@@ -76,27 +76,27 @@ save_strengths_particular(): macro {
 parseTable(): macro={
    if (iLine==1) {
       if (is_carbon==0) {
-         READTABLE, file="Protoni_Sala3_2021-02-13.tfs", table=table_settings;
+         READTABLE, file="LGEN/Protoni_Sala3_2021-02-13.tfs", table=table_settings;
       }else{
-         READTABLE, file="Carbonio_Sala3_FromRepoNovembre2020.tfs", table=table_settings;
+         READTABLE, file="LGEN/Carbonio_Sala3_FromRepoNovembre2020.tfs", table=table_settings;
       };
    }elseif (iLine==2) {
       if (is_carbon==0) {
-         READTABLE, file="Protoni_Sala2H_2021-02-13.tfs", table=table_settings;
+         READTABLE, file="LGEN/Protoni_Sala2H_2021-02-13.tfs", table=table_settings;
       }else{
-         READTABLE, file="Carbonio_Sala2H_FromRepo.tfs", table=table_settings;
+         READTABLE, file="LGEN/Carbonio_Sala2H_FromRepo.tfs", table=table_settings;
       };
    }elseif (iLine==3) {
       if (is_carbon==0) {
-         READTABLE, file="Protoni_Sala2V_2021-02-13.tfs", table=table_settings;
+         READTABLE, file="LGEN/Protoni_Sala2V_2021-02-13.tfs", table=table_settings;
       }else{
-         READTABLE, file="Carbonio_Sala2V_FromRepo.tfs", table=table_settings;
+         READTABLE, file="LGEN/Carbonio_Sala2V_FromRepo.tfs", table=table_settings;
       };
    }elseif (iLine==4) {
       if (is_carbon==0) {
-         READTABLE, file="Protoni_Sala1_2021-02-13.tfs", table=table_settings;
+         READTABLE, file="LGEN/Protoni_Sala1_2021-02-13.tfs", table=table_settings;
       }else{
-         READTABLE, file="Carbonio_Sala1_FromRepoNovembre2020.tfs", table=table_settings;
+         READTABLE, file="LGEN/Carbonio_Sala1_FromRepoNovembre2020.tfs", table=table_settings;
       };
    };
 };
