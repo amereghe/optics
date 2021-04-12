@@ -52,6 +52,8 @@ call, file=start-conditions.opt;
 !    MADX beam command)
 exec, setBeam(APICLS009);
 
+! end of template - DO NOT DELETE THIS LINE!
+
 ! ==============================================================================
 ! a simple example
 ! ==============================================================================

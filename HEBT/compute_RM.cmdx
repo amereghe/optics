@@ -14,7 +14,7 @@ NEnLevelstop=lunghezzaLGEN;
 ! NEnLevelstop=1;
 NEnLevelstep=1;
 
-! end of template
+! end of template - DO NOT DELETE THIS LINE!
 
 if (iLine==1) {
    ! define all observations
