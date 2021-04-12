@@ -49,14 +49,14 @@ switch source
                     case "PROTON"
                         % protons - RM and RFKO are basically the same, LFalbo
                         rampFileName="S:\Accelerating-System\Accelerator-data\Area dati MD\00Rampe\MatlabRampGen2.8\INPUT\CSV-TRATTAMENTI\Protoni.csv"; 
-                        RampGen2MADX(rampFileName,"synchro\TM_Protons.tfs");
+                        RampGen2MADX(rampFileName,"synchro\RampGen\TM_Protons.tfs");
                     case "CARBON"
                         if ( strcmp(config,"RFKO") )
                             rampFileName="S:\Accelerating-System\Accelerator-data\Area dati MD\00Rampe\MatlabRampGen2.8\INPUT\KmachinephotoCarbRFKO.xlsx";
-                            RampGen2MADX(rampFileName,"synchro\KmachinephotoCarbRFKO.tfs","Foglio1");
+                            RampGen2MADX(rampFileName,"synchro\RampGen\KmachinephotoCarbRFKO.tfs","Foglio1");
                         else
                             rampFileName="S:\Accelerating-System\Accelerator-data\Area dati MD\00Rampe\MatlabRampGen2.8\INPUT\CSV-TRATTAMENTI\Carbonio.csv"; 
-                            RampGen2MADX(rampFileName,"synchro\TM_Carbon.tfs");
+                            RampGen2MADX(rampFileName,"synchro\RampGen\TM_Carbon.tfs");
                         end
                     otherwise
                         error("no source of data available for %s %s %s %s",machine,source,beamPart,config);
@@ -83,6 +83,9 @@ switch source
                         FileNameCurrents="S:\Accelerating-System\Accelerator-data\Area dati MD\00Setting\Sincro\CorrentiFlatTop\ProtoniSincro_2021-02-13.xlsx";
                         currentData = GetOPDataFromTables(FileNameCurrents,"Foglio1");
                     case "CARBON"
+                        if ( strcmp(config,"RFKO") )
+                            error("no source of data available for %s %s %s %s",machine,source,beamPart,config);
+                        end
                         % BUILD TABLE WITH CyCo, Range, Energy and Brho
                         % - get CyCo (col 1 []), range (col 2 [mm]) and Energy (col 4 [MeV/n]) - columns in cell array
                         FileName="S:\Accelerating-System\Accelerator-data\Area dati MD\00Rampe\MatlabRampGen2.8\INPUT\CSV-TRATTAMENTI\Carbonio.csv";
@@ -108,7 +111,7 @@ switch source
                 CyCoData(:,1) = cellstr(buffer(:,1:4)) ; % 
                 % MADX fileName
                 [filepath,tmpName,ext] = fileparts(FileNameCurrents);
-                MADXFileName=sprintf("synchro\\%s.tfs",tmpName);
+                MADXFileName=sprintf("synchro\\LGEN\\%s.tfs",tmpName);
             case {"LINEZ","SALA1","LINEV","SALA2V","LINEU","SALA2H","LINET","SALA3"}
                 switch beamPart
                     case "PROTON"
@@ -168,7 +171,7 @@ switch source
                 CyCoData={CyCoData{:,2} ; CyCoData{:,3} ; CyCoData{:,1} ; BrhoData{:,2} }';
                 % MADX fileName
                 [filepath,tmpName,ext] = fileparts(FileNameCurrents);
-                MADXFileName=sprintf("HEBT\\%s.tfs",tmpName);
+                MADXFileName=sprintf("HEBT\\LGEN\\%s.tfs",tmpName);
             otherwise
                 error("no source of data available for %s %s %s %s",machine,source,beamPart,config);
         end % switch: LGEN, machine
