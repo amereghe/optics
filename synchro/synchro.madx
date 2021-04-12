@@ -96,7 +96,7 @@ exec, save_strengths(myOptics);
 ! ==============================================================================
 
 ! loop through .txt file out of an excel for generating magnet ramps
-! call, file="loopThroughGenRampFile.cmdx";
+! call, file="loopThroughRampGenFile.cmdx";
 
 ! loop through .tfs file out of the repo with currents
 ! call, file="loopThroughLGENFile.cmdx";
