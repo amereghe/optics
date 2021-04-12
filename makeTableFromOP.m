@@ -4,14 +4,14 @@ pathToLibrary="..\MatLabTools";
 addpath(genpath(pathToLibrary));
 
 % user settings
-beamPart="PROTON"; % select beam particle: proton, carbon
-machine="LineV"; % select machine: synchro, LineZ/Sala1, LineU/Sala2H, LineV/Sala2V, and LineT/Sala3; LEBT and MEBT to come 
+beamPart="CARBON"; % select beam particle: proton, carbon
+machine="linet"; % select machine: synchro, LineZ/Sala1, LineU/Sala2H, LineV/Sala2V, and LineT/Sala3; LEBT and MEBT to come 
 config="TM"; % select configuration: TM, RFKO
 source="LGEN"; % source: RampGen or LGEN
 doVisualCheck=1; % perform some visual checks: 0=no, otherwise=yes; available only for LGEN source
-LGENsCheck=[]; % subset to check, otherwise all - eg ["P6-006A-LGEN" "P6-007A-LGEN" "P6-008A-LGEN" "P6-009A-LGEN" ];
+LGENsCheck=[]; % subset to check, otherwise all - eg [ "P6-006A-LGEN" "P6-007A-LGEN" "P6-008A-LGEN" "P6-009A-LGEN" ];
 filters=["NaN" "0"]; % filter PSs where all CyCo show "NaN" or "0"
-currentsOnly=1;
+currentsOnly=1; % advice: synchro=0, HEBT=1
 
 % processing
 beamPart=upper(beamPart);
@@ -51,12 +51,13 @@ switch source
                         rampFileName="S:\Accelerating-System\Accelerator-data\Area dati MD\00Rampe\MatlabRampGen2.8\INPUT\CSV-TRATTAMENTI\Protoni.csv"; 
                         RampGen2MADX(rampFileName,"synchro\TM_Protons.tfs");
                     case "CARBON"
-                        if ( ~strcmp(config,"RFKO") )
-                            error("no source of data available for %s %s %s %s",machine,source,beamPart,config);
+                        if ( strcmp(config,"RFKO") )
+                            rampFileName="S:\Accelerating-System\Accelerator-data\Area dati MD\00Rampe\MatlabRampGen2.8\INPUT\KmachinephotoCarbRFKO.xlsx";
+                            RampGen2MADX(rampFileName,"synchro\KmachinephotoCarbRFKO.tfs","Foglio1");
+                        else
+                            rampFileName="S:\Accelerating-System\Accelerator-data\Area dati MD\00Rampe\MatlabRampGen2.8\INPUT\CSV-TRATTAMENTI\Carbonio.csv"; 
+                            RampGen2MADX(rampFileName,"synchro\TM_Carbon.tfs");
                         end
-                        % RFKO, Carbon
-                        rampFileName="S:\Accelerating-System\Accelerator-data\Area dati MD\00Rampe\MatlabRampGen2.8\INPUT\KmachinephotoCarbRFKO.xlsx";
-                        RampGen2MADX(rampFileName,"synchro\KmachinephotoCarbRFKO.tfs","Foglio1");
                     otherwise
                         error("no source of data available for %s %s %s %s",machine,source,beamPart,config);
                 end % switch: RAMPGEN, SYNCHRO, beamPart
@@ -72,56 +73,51 @@ switch source
                     case "PROTON"
                         % BUILD TABLE WITH CyCo, Range, Energy and Brho
                         % - get CyCo (col 1 []), range (col 2 [mm]) and Energy (col 4 [MeV/n]) - columns in cell array
-                        FileName="S:\Accelerating-System\Accelerator-data\Area dati MD\00Rampe\MatlabRampGen2.9\INPUT\Protoni.xlsx";
-                        CyCoData = GetOPDataFromTables(FileName,"Protoni");
-                        CyCoData = CyCoData(2:end,:); % remove header
+                        FileName="S:\Accelerating-System\Accelerator-data\Area dati MD\00Rampe\MatlabRampGen2.8\INPUT\CSV-TRATTAMENTI\Protoni.csv";
+                        CyCoData = GetOPDataFromTables(FileName);
                         % - build array of values of Brho (as in RampGen)
-                        mp = 938.255;
-                        An = 1;
-                        Zn = 1;
-                        c = 2.99792458e8;  % velocità della luce [m/s]
-                        BRO = @(x)(An/Zn)*((mp*sqrt((1 + x/mp).^2 - 1))/c)*10^6;
-                        temp=num2cell(BRO(cell2mat(CyCoData(:,4))));
-                        % - make a unique table: 1=CyCo[], 2=range[mm], 3=Energy[MeV/n], 4=Brho[Tm] - columns in final cell array
-                        CyCoData={CyCoData{:,1} ; CyCoData{:,2} ; CyCoData{:,4} ; temp{:,1} }';
-                        buffer = vertcat( CyCoData{:,1} ) ;      % extract only first four digits of cyco
-                        CyCoData(:,1) = cellstr(buffer(:,1:4)) ; % 
-                        
+                        mp = 938.255; An = 1; Zn = 1;
                         % PARSE FILE WITH CURRENTS AT FT - columns in final cell array:
                         % - nRows: number of power supplies + a header
                         % - nColumns: number of cycle codes + 2 (PS name + property)
                         FileNameCurrents="S:\Accelerating-System\Accelerator-data\Area dati MD\00Setting\Sincro\CorrentiFlatTop\ProtoniSincro_2021-02-13.xlsx";
                         currentData = GetOPDataFromTables(FileNameCurrents,"Foglio1");
-                        currents=cell2mat(currentData(2:end,3:end)); % remove useless data from PS file and convert to matrix of floats
-                        
-                        % MADX fileName
-                        [filepath,tmpName,ext] = fileparts(FileNameCurrents);
-                        MADXFileName=sprintf("synchro\\%s.tfs",tmpName);
-                    otherwise
-                        error("no source of data available for %s %s %s %s",machine,source,beamPart,config);
-                end % switch: LGEN, SYNCHRO, beamPart
-            case {"LINEZ","SALA1","LINEV","SALA2V","LINEU","SALA2H","LINET","SALA3"}
-                switch beamPart
-                    case "PROTON"
+                    case "CARBON"
                         % BUILD TABLE WITH CyCo, Range, Energy and Brho
-                        % - get CyCo (col 2 []), range (col 3 [mm]) and Energy (col 1 [MeV/n]) - columns in cell array
-                        FileName="S:\Accelerating-System\Accelerator-data\Area dati MD\00Setting\MeVvsCyCo_P.xlsx";
-                        CyCoData = GetOPDataFromTables(FileName,"Sheet1");
-                        CyCoData = CyCoData(2:end,:); % remove header
-                        % - get Brho (col 2 [Tm]) and Energy (col 1 [MeV/n]) - columns in cell array:
-                        FileName="S:\Accelerating-System\Accelerator-data\Area dati MD\00Setting\EvsBro_P.xlsx";
-                        BrhoData = GetOPDataFromTables(FileName,"Sheet1");
-                        BrhoData = BrhoData(2:end,:); % remove header
-                        % - get common ranges
-                        [commonRanges,iCRa,iCRb]=intersect(cell2mat(CyCoData(:,3)),cell2mat(BrhoData(:,1)));
-                        CyCoData=CyCoData(iCRa,:);
-                        BrhoData=BrhoData(iCRb,:);
-                        % - make a unique table: 1=CyCo[], 2=range[mm], 3=Energy[MeV/n], 4=Brho[Tm] - columns in final cell array
-                        CyCoData={CyCoData{:,2} ; CyCoData{:,3} ; CyCoData{:,1} ; BrhoData{:,2} }';
-                        
+                        % - get CyCo (col 1 []), range (col 2 [mm]) and Energy (col 4 [MeV/n]) - columns in cell array
+                        FileName="S:\Accelerating-System\Accelerator-data\Area dati MD\00Rampe\MatlabRampGen2.8\INPUT\CSV-TRATTAMENTI\Carbonio.csv";
+                        CyCoData = GetOPDataFromTables(FileName);
+                        % - build array of values of Brho (as in RampGen)
+                        mp = 931.2225; An = 12; Zn = 6;
                         % PARSE FILE WITH CURRENTS AT FT - columns in final cell array:
                         % - nRows: number of power supplies + a header
                         % - nColumns: number of cycle codes + 2 (PS name + property)
+                        FileNameCurrents="S:\Accelerating-System\Accelerator-data\Area dati MD\00Setting\Sincro\CorrentiFlatTop\CarbonioSincro_2021-02-05.xlsx";
+                        currentData = GetOPDataFromTables(FileNameCurrents,"Foglio1");
+                    otherwise
+                        error("no source of data available for %s %s %s %s",machine,source,beamPart,config);
+                end % switch: LGEN, SYNCHRO, beamPart
+                % continue crunching CyCo data
+                CyCoData = CyCoData(2:end,:); % remove header
+                c = 2.99792458e8;  % velocità della luce [m/s]
+                BRO = @(x)(An/Zn)*((mp*sqrt((1 + x/mp).^2 - 1))/c)*10^6;
+                temp=num2cell(BRO(cell2mat(CyCoData(:,4))));
+                % - make a unique table: 1=CyCo[], 2=range[mm], 3=Energy[MeV/n], 4=Brho[Tm] - columns in final cell array
+                CyCoData={CyCoData{:,1} ; CyCoData{:,2} ; CyCoData{:,4} ; temp{:,1} }';
+                buffer = vertcat( CyCoData{:,1} ) ;      % extract only first four digits of cyco
+                CyCoData(:,1) = cellstr(buffer(:,1:4)) ; % 
+                % MADX fileName
+                [filepath,tmpName,ext] = fileparts(FileNameCurrents);
+                MADXFileName=sprintf("synchro\\%s.tfs",tmpName);
+            case {"LINEZ","SALA1","LINEV","SALA2V","LINEU","SALA2H","LINET","SALA3"}
+                switch beamPart
+                    case "PROTON"
+                        % BUILD TABLEs WITH CyCo, Range, Energy and Brho
+                        FileName="S:\Accelerating-System\Accelerator-data\Area dati MD\00Setting\MeVvsCyCo_P.xlsx";
+                        CyCoData = GetOPDataFromTables(FileName,"Sheet1");
+                        FileName="S:\Accelerating-System\Accelerator-data\Area dati MD\00Setting\EvsBro_P.xlsx";
+                        BrhoData = GetOPDataFromTables(FileName,"Sheet1");
+                        % PARSE FILE WITH CURRENTS AT FT - columns in final cell array:
                         switch machine
                             case {"LINEZ","SALA1"}
                                 FileNameCurrents="S:\Accelerating-System\Accelerator-data\Area dati MD\00Setting\HEBT\Protoni\ProtoniSala1\Protoni_Sala1_2021-02-13.xlsx";
@@ -136,25 +132,57 @@ switch source
                                 FileNameCurrents="S:\Accelerating-System\Accelerator-data\Area dati MD\00Setting\HEBT\Protoni\ProtoniSala3\Protoni_Sala3_2021-02-13.xlsx";
                                 currentData = GetOPDataFromTables(FileNameCurrents,"15.02.2021 - 09.32");
                         end
-                        currents=str2double(currentData(2:end,3:end)); % remove useless data from PS file and convert to matrix of floats
-                        
-                        % MADX fileName
-                        [filepath,tmpName,ext] = fileparts(FileNameCurrents);
-                        MADXFileName=sprintf("HEBT\\%s.tfs",tmpName);
+                    case "CARBON"
+                        % BUILD TABLEs WITH CyCo, Range, Energy and Brho
+                        FileName="S:\Accelerating-System\Accelerator-data\Area dati MD\00Setting\MeVvsCyCo_C.xlsx";
+                        CyCoData = GetOPDataFromTables(FileName,"Sheet1");
+                        FileName="S:\Accelerating-System\Accelerator-data\Area dati MD\00Setting\EvsBro_C.xlsx";
+                        BrhoData = GetOPDataFromTables(FileName,"Sheet1");
+                        % PARSE FILE WITH CURRENTS AT FT - columns in final cell array:
+                        switch machine
+                            case {"LINEZ","SALA1"}
+                                FileNameCurrents="S:\Accelerating-System\Accelerator-data\Area dati MD\00Setting\HEBT\Carbonio\lineaZ\fuocopiccolo\Carbonio_Sala1_FromRepoNovembre2020.xlsx";
+                                currentData = GetOPDataFromTables(FileNameCurrents,"09.11.2020 - 10.11");
+                            case {"LINEV","SALA2V"}
+                                FileNameCurrents="S:\Accelerating-System\Accelerator-data\Area dati MD\00Setting\HEBT\Carbonio\lineaV\FuocoPiccolo\Carbonio_Sala2V_FromRepo.xlsx";
+                                currentData = GetOPDataFromTables(FileNameCurrents,"21.08.2019 - 12.11");
+                            case {"LINEU","SALA2H"}
+                                FileNameCurrents="S:\Accelerating-System\Accelerator-data\Area dati MD\00Setting\HEBT\Carbonio\lineaU\FuocoPiccolo\Carbonio_Sala2H_FromRepo.xlsx";
+                                currentData = GetOPDataFromTables(FileNameCurrents,"21.08.2019 - 12.04");
+                            case {"LINET","SALA3"}
+                                FileNameCurrents="S:\Accelerating-System\Accelerator-data\Area dati MD\00Setting\HEBT\Carbonio\lineaT\fuocopiccolo\Carbonio_Sala3_FromRepoNovembre2020.xlsx";
+                                currentData = GetOPDataFromTables(FileNameCurrents,"09.11.2020 - 10.11");
+                        end
                     otherwise
                         error("no source of data available for %s %s %s %s",machine,source,beamPart,config);
                 end % switch: LGEN, LINET/SALA3/LINEU/SALA2H/LINEV/SALA2V/LINEZ/SALA1, beamPart
+                % - get CyCo (col 2 []), range (col 3 [mm]) and Energy (col 1 [MeV/n]) - columns in cell array
+                CyCoData = CyCoData(2:end,:); % remove header
+                % - get Brho (col 2 [Tm]) and Energy (col 1 [MeV/n]) - columns in cell array:
+                BrhoData = BrhoData(2:end,:); % remove header
+                % - get common ranges
+                [commonRanges,iCRa,iCRb]=intersect(cell2mat(CyCoData(:,3)),cell2mat(BrhoData(:,1)));
+                CyCoData=CyCoData(iCRa,:);
+                BrhoData=BrhoData(iCRb,:);
+                % - make a unique table: 1=CyCo[], 2=range[mm], 3=Energy[MeV/n], 4=Brho[Tm] - columns in final cell array
+                CyCoData={CyCoData{:,2} ; CyCoData{:,3} ; CyCoData{:,1} ; BrhoData{:,2} }';
+                % MADX fileName
+                [filepath,tmpName,ext] = fileparts(FileNameCurrents);
+                MADXFileName=sprintf("HEBT\\%s.tfs",tmpName);
             otherwise
                 error("no source of data available for %s %s %s %s",machine,source,beamPart,config);
         end % switch: LGEN, machine
+        
+        % get currents and PSs to be crunched
+        % - nRows: number of power supplies + a header
+        % - nColumns: number of cycle codes + 2 (PS name + property)
+        [currents,psNames]=tableCurrents(currentData(2:end,3:end),currentData(2:end,1)); % remove useless data from PS file and convert to matrix of floats
+        nPSs=length(psNames);
         
         % - get cycle codes to be crunched
         buffer = vertcat( currentData{1,3:end} ) ; % extract only first four digits of cyco
         currCycodes=cellstr(buffer(:,1:4)) ;       %
         nCyCodes=length(currCycodes);
-        % - get PS to be crunched
-        psNames=upper(currentData(2:end,1));
-        nPSs=length(psNames);
 
         for iFilter=1:length(filters)
             switch upper(filters(iFilter))
@@ -312,4 +340,28 @@ function save2MADXTable(myTable,psNames,MADXFileName,isCurrent)
     headerTypes(:)="%le";
     % export MADX table
     ExportMADXtable(MADXFileName,myTitle,myTable,headers,headerTypes);
+end
+
+function [currents,psNames]=tableCurrents(currentData,psNameData)
+    nRows=size(currentData,1);
+    nCols=size(currentData,2);
+    whichRows=false(nRows,1);
+    for iRow=1:nRows
+        if ( ischar(currentData{iRow,1}) || isstring(currentData{iRow,1}) )
+            whichRows(iRow)=1;
+        else
+            whichRows(iRow)=~ismissing(currentData{iRow,1});
+        end
+    end
+    nEmpty=nRows-sum(whichRows);
+    if ( nEmpty>0 )
+        warning("found %d PSs with empty rows! removing them...",nEmpty);
+    end
+    currents=currentData(whichRows,:);
+    psNames=upper(psNameData(whichRows,:));
+    if ( ischar(currents{1,1}) || isstring(currents{1,1}) )
+        currents=str2double(currents);
+    else
+        currents=cell2mat(currents);
+    end
 end
