@@ -7,8 +7,8 @@ Option, warn=true, info=true, echo=true;
 ! 1: open beam line
 is_open=1;
 
-! 0: proton optics
-! 1: carbon optics
+! 0: protons
+! 1: carbon ions
 is_carbon=1;
 
 ! 0: initial conditions at entrance of ESE
@@ -22,7 +22,7 @@ start_cond=1;
 ! 4: LineZ, Room 1
 iLine=1;
 
-title, "HEBT CNAO";
+iMacro_I2K_QU=1; ! 1: linear; 5: fifth order;
 
 call, file=../macros.cmdx;
 call, file=macros.cmdx;
@@ -32,12 +32,16 @@ call, file=../common_defs.madx;
 
 ! load desired HEBT
 if (iLine==1) {
+   title, "HEBT CNAO - Line T - Sala 3";
    call, file=LineT.seq;
 }elseif(iLine==2) {
+   title, "HEBT CNAO - Line U - Sala 2(H)";
    call, file=LineU.seq;
 }elseif(iLine==3) {
+   title, "HEBT CNAO - Line V - Sala 2(V)";
    call, file=LineV.seq;
 }elseif(iLine==4) {
+   title, "HEBT CNAO - Line Z - Sala 1";
    call, file=LineZ.seq;
 };
 
