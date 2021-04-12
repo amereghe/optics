@@ -126,7 +126,7 @@ setBeam(mySequence): macro = {
 save_RMatrix(eleName): macro = {
   REMOVEFILE, FILE="Rmatrix.txt";
   assign, echo="Rmatrix.txt";
-  PRINTF, TEXT="#  | % 24.0f % 24.0f % 24.0f % 24.0f % 24.0f % 24.0f", VALUE=1,2,3,4,5,6;
+  PRINTF, TEXT="#  | % 23.0f % 23.0f % 23.0f % 23.0f % 23.0f % 23.0f", VALUE=1,2,3,4,5,6;
   PRINTF, TEXT="#--|------------------------------------------------------------------------------------------------------------------------------------------------", VALUE=0;
   n=1;
   WHILE (n<=6) {
