@@ -129,9 +129,9 @@ saveStrengths(additional): macro={
    };
 };
 
-compute_RM_allCurrents(myMagName,myProperty,myI2K): macro={
-   REMOVEFILE, FILE=myMagName__myProperty__RM.tfs;
-   exec, writeRMHeader(myMagName__myProperty__RM.tfs);
+compute_RM_allCurrents(myMagName,myProperty,myI2K,fileName): macro={
+   REMOVEFILE, FILE=fileName;
+   exec, writeRMHeader(fileName);
    nEnLevel=NEnLevelstart;
    WHILE (nEnLevel <= NEnLevelstop ) {
       ! loop throuth LGEN data
@@ -162,7 +162,7 @@ compute_RM_allCurrents(myMagName,myProperty,myI2K): macro={
 
          ! save data
          kWrite=kmyMagName;
-         exec, writeRMObservations(myMagName__myProperty__RM.tfs);
+         exec, writeRMObservations(fileName);
 
          ! reset kick to original value
          ! value, myMagName->myProperty;
