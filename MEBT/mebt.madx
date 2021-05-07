@@ -21,7 +21,8 @@ p_mass=0.93827204;
 p_energy=0.0071500;
 
 call, file="mebt.seq";
-call,file="k_quads.txt";
+call, file="k_quads.str";
+! call, file="k_Kicks.str";
 
 
 !Beam type definition
