@@ -1,0 +1,9 @@
+initial: BETA0,
+         betx = 1.,
+         alfx = 0.,
+         bety = 1.,
+         alfy = 0.,
+         dx = 0.,
+         dpx = 0.,
+         dy = 0.,
+         dpy = 0.;

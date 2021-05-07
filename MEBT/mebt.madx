@@ -1,35 +1,45 @@
+! AM, 2021-05-07
+! template files from SSavazzi - they seem to come from MADbuilder...
+
 !Cycle Code - 060006cc0900
 !MAD Lattice - MEBT MADX - MEBT MADX
 Option, warn=true, info=true, echo=true;
 ! assign, echo=output.out;
 
+! 0: closed beam line (ie a ring)
+! 1: open beam line
+is_open=1;
+
+! 0: protons
+! 1: carbon ions
+is_carbon=1;
+
+call, file="../macros.cmdx";
+! call, file=macros.cmdx;
+
 p_mass=0.93827204;
 p_energy=0.0071500;
 
-call, file="metb.seq";
+call, file="mebt.seq";
 call,file="k_quads.txt";
-!call,file="k_I_quads.txt";
 
 
 !Beam type definition
 beam, particle=proton, mass=p_mass, energy=p_mass+p_energy, sequence=MUXL;
 
+! load initial conditions
+call, file=start-conditions.opt;
 
-use, sequence=MUXL;
+! ==============================================================================
+! a simple example
+! ==============================================================================
 
-betaxin = 1;
-betayin = 1;
-alfaxin = ;
-alfayin = ;
-dxin = ;
-dpxin = ;
-dyin = ;
-dpyin = ;
-select,flag=twiss,clear;
-select,flag=twiss,column=name,s,betx,alfx,dx,dpx,mux,x,bety,alfy,dy,dpy,muy,y;
-twiss,file=twiss.txt,Deltap=deltapin,betx=betaxin,bety=betayin,alfx= alfaxin,alfy=alfayin,dx= dxin, dpx= dpxin,
-dy= dyin, dpy= dpyin,mux=muxin,muy=muyin, x=xin, px=pxin, y=yin, py=pyin;
+! generate optics files
+use,sequence=MUXL;
+exec, saveOpticsTFS(example);
+exec, saveGeometryTFS(example);
 
+! plotting
 plot, haxis=s, vaxis = betx, bety, symbol=2,file=figure,colour=100;
 plot, haxis=s, vaxis = alfx, alfy, symbol=2,file=figure,colour=100;
 plot, haxis=s, vaxis = dx, dy, symbol=2,file=figure,colour=100;
@@ -37,15 +47,7 @@ plot, haxis=s, vaxis = dpx, dpy, symbol=2,file=figure,colour=100;
 plot, haxis=s, vaxis = mux, muy, symbol=2,file=figure,colour=100;
 plot, haxis=s, vaxis = x, y, symbol=2,file=figure,colour=100;
 
+! apic
+use,sequence=MUXL;
+exec, saveAPIC();
 
-!save, file="nome_sequenza.seq";
-
-
-!   APIC TRIAL + TWISS            
-
-SELECT, flag=twiss,clear;
-select,flag=twiss,COLUMN=NAME, KEYWORD, L, TILT, ANGLE, E1, E2, K1L, K2L, K3L, KS;
-twiss,file=apic.txt,Deltap=deltapin,betx=betaxin,bety=betayin,alfx= alfaxin,alfy=alfayin,dx= dxin, dpx= dpxin,
-dy= dyin, dpy= dpyin,mux=muxin,muy=muyin, x=xin, px=pxin, y=yin, py=pyin;
-
-return;
