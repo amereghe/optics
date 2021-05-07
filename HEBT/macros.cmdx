@@ -20,3 +20,160 @@ I2K_HEBT_QUs_lin(MagName,biro) : macro {
   ! fromItoK = GL/(lq*Bro) 
   KMagName := 0.03258/(0.45*biro) *IMagName *abs(FMagName);
 };
+
+I2K_HEBT_CEBH(MagName,biro): macro {
+  ! from SSavazzi, relation for MADbuilder
+  ! the macro expects IMagName, KMagName and FMagName to be defined
+  ! Lmag=0.52m;
+  ! KMagName := ((2.615E-5-3.385E-4*IMagName)/biro*0.52)*abs(FMagName);
+  !
+  ! Magnetic Measurements doc, 2007, performed on prototype
+  ! S:\Accelerating-System\Magnets\Magnetic Measurements\Frascati\HEBT\Documenti_misure_e_immagini\Correttori
+  ! BLh[Tm]=-1.76 10-4 * I [A] + 1.36 10-5
+  ! change sign: a negative vertical B-field (in both ref systems, i.e.
+  !    measurements and MADX) kicks positively-charged particles towards x>0 in MADX
+  KMagName :=-((-1.76E-4*IMagName + 1.36E-5)/biro)*abs(FMagName);
+};
+
+I2K_HEBT_CEBV(MagName,biro): macro {
+  ! from SSavazzi, relation for MADbuilder
+  ! the macro expects IMagName, KMagName and FMagName to be defined
+  ! Lmag=0.52m;
+  ! KMagName := ((2.981E-5-3.385E-4*IMagName)/biro*0.52)*abs(FMagName);
+  !
+  ! Magnetic Measurements doc, 2007, performed on prototype
+  ! S:\Accelerating-System\Magnets\Magnetic Measurements\Frascati\HEBT\Documenti_misure_e_immagini\Correttori
+  ! BLv[Tm]=-1.76 10-4 * I [A] + 1.55 10-5
+  ! change sign: a negative horizontal B-field in measurements ref sys
+  !    corresponds to a positive horizontal B-field in MADX, which kicks
+  !    positively-charged particles towards y>0
+  KMagName :=-((-1.76E-4*IMagName + 1.55E-5)/biro)*abs(FMagName);
+};
+
+save_strengths_particular(): macro {
+   print, TEXT="";
+   print, TEXT="! main dipole strengths [rad/m]";
+   value, K0MB;
+   print, TEXT="";
+   print, TEXT="! quadrupole strengths [rad/m^2]";
+   value, KQH2_012A;
+   value, KQH2_016A;
+   value, KQH2_022A;
+   value, KQH4_003A;
+   value, KQH4_007A;
+   value, KQH4_013A;
+   value, KQH5_005A;
+   value, KQH5_009A;
+   value, KQH5_015A;
+   value, KQT1_004A;
+   value, KQT1_013A;
+   value, KQT1_019A;
+   value, KQT2_005A;
+   value, KQT2_012A;
+   value, KQT2_018A;
+};
+
+parseTable(): macro={
+   if (iLine==1) {
+      if (is_carbon==0) {
+         READTABLE, file="LGEN/Protoni_Sala3_2021-02-13.tfs", table=table_settings;
+      }else{
+         READTABLE, file="LGEN/Carbonio_Sala3_FromRepoNovembre2020.tfs", table=table_settings;
+      };
+   }elseif (iLine==2) {
+      if (is_carbon==0) {
+         READTABLE, file="LGEN/Protoni_Sala2H_2021-02-13.tfs", table=table_settings;
+      }else{
+         READTABLE, file="LGEN/Carbonio_Sala2H_FromRepo.tfs", table=table_settings;
+      };
+   }elseif (iLine==3) {
+      if (is_carbon==0) {
+         READTABLE, file="LGEN/Protoni_Sala2V_2021-02-13.tfs", table=table_settings;
+      }else{
+         READTABLE, file="LGEN/Carbonio_Sala2V_FromRepo.tfs", table=table_settings;
+      };
+   }elseif (iLine==4) {
+      if (is_carbon==0) {
+         READTABLE, file="LGEN/Protoni_Sala1_2021-02-13.tfs", table=table_settings;
+      }else{
+         READTABLE, file="LGEN/Carbonio_Sala1_FromRepoNovembre2020.tfs", table=table_settings;
+      };
+   };
+};
+
+saveOptics(additional): macro={
+  if (iLine==1) {
+      exec, saveOpticsTFS(LineT_additional);
+      exec, saveGeometryTFS(LineT_additional);
+   }elseif (iLine==2) {
+      exec, saveOpticsTFS(LineU_additional);
+      exec, saveGeometryTFS(LineU_additional);
+   }elseif (iLine==3) {
+      exec, saveOpticsTFS(LineV_additional);
+      exec, saveGeometryTFS(LineV_additional);
+   }elseif (iLine==4) {
+      exec, saveOpticsTFS(LineZ_additional);
+      exec, saveGeometryTFS(LineZ_additional);
+   };
+};
+
+saveStrengths(additional): macro={
+  if (iLine==1) {
+      exec, save_strengths(LineT_additional);
+   }elseif (iLine==2) {
+      exec, save_strengths(LineU_additional);
+   }elseif (iLine==3) {
+      exec, save_strengths(LineV_additional);
+   }elseif (iLine==4) {
+      exec, save_strengths(LineZ_additional);
+   };
+};
+
+compute_RM_allCurrents(myMagName,myProperty,myI2K,fileName): macro={
+   REMOVEFILE, FILE=fileName;
+   exec, writeRMHeader(fileName);
+   nEnLevel=NEnLevelstart;
+   WHILE (nEnLevel <= NEnLevelstop ) {
+      ! loop throuth LGEN data
+      SETVARS, TABLE=table_settings, ROW=nEnLevel;
+      K0MB=K0MB_ref;
+      call, file="settings_from_LGEN_table.str";
+      
+      ! notify user where we are
+      PRINTF, TEXT="==========================================================================================",VALUE=0.0;
+      PRINTF, TEXT="at Ek = %g MeV/u - BP = %g mm - row = %.0f ...", VALUE= Ek,BP,nEnLevel;
+      PRINTF, TEXT="==========================================================================================",VALUE=0.0;
+
+      ! loop through current values
+      currI=Imin;
+      while (currI<=Imax) {
+
+         imyMagName=currI;
+         kmyMagName_orig=myMagName->myProperty;
+         fmyMagName=1.0;
+         exec, myI2K(myMagName,Brho);
+         ! value, myMagName->myProperty;
+         myMagName->myProperty=kmyMagName;
+         ! value, myMagName->myProperty;
+         
+         use,sequence=APICLS009;
+         select,flag=twiss,clear;
+         twiss, beta0=initial;
+
+         ! save data
+         kWrite=kmyMagName;
+         exec, writeRMObservations(fileName);
+
+         ! reset kick to original value
+         ! value, myMagName->myProperty;
+         myMagName->myProperty=kmyMagName_orig;
+         ! value, myMagName->myProperty;
+
+         ! get ready for new point
+         currI=currI+Istep;
+      };
+
+      ! get ready for new point
+      nEnLevel = nEnLevel+NEnLevelstep;
+   };
+};

@@ -3,6 +3,7 @@
 ! S3_012A_BDI and SD_012A_BDI are set by Ibumper;
 
 Ek=EdipExtr;
+BP=BP_mm;
 
 ! - quads:
 KR=s2kextr;  !S2 [rad/m^-2]
@@ -10,7 +11,7 @@ KF=s3kextr;  !S3 [rad/m^-2]
 KD=s4kextr;  !S4 [rad/m^-2]
 ! - air core quad:
 KACQ=0.0;               !  [rad/m^-2]
-! - tune kicker (S8_024A_SKQ)
+! - skew quad (S8_024A_SKQ)
 KSKQ=0.0;               !  [rad/m^-2]
 
 ! - sextupoles:

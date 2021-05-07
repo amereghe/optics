@@ -7,8 +7,8 @@ Option, warn=true, info=true, echo=true;
 ! 1: open beam line
 is_open=1;
 
-! 0: proton optics
-! 1: carbon optics
+! 0: protons
+! 1: carbon ions
 is_carbon=1;
 
 ! 0: initial conditions at entrance of ESE
@@ -16,49 +16,71 @@ is_carbon=1;
 !    / H2-001A-MSN (HEBT seq)
 start_cond=1;
 
-title, "HEBT CNAO";
+! 1: LineT, Room 3
+! 2: LineU, Room 2H
+! 3: LineV, Room 2V
+! 4: LineZ, Room 1
+iLine=1;
+
+iMacro_I2K_QU=1; ! 1: linear; 5: fifth order;
 
 call, file=../macros.cmdx;
 call, file=macros.cmdx;
 
-! load desired HEBT
-call, file=LineT.seq;
+! load common defs
+call, file=../common_defs.madx;
 
-! load desired optics
-call, file=kqinit30mmCarb.str;
+! load desired HEBT
+if (iLine==1) {
+   title, "HEBT CNAO - Line T - Sala 3";
+   call, file=LineT.seq;
+}elseif(iLine==2) {
+   title, "HEBT CNAO - Line U - Sala 2(H)";
+   call, file=LineU.seq;
+}elseif(iLine==3) {
+   title, "HEBT CNAO - Line V - Sala 2(V)";
+   call, file=LineV.seq;
+}elseif(iLine==4) {
+   title, "HEBT CNAO - Line Z - Sala 1";
+   call, file=LineZ.seq;
+};
 
 ! load initial conditions
 call, file=start-conditions.opt;
 
-! ==============================================================================
-! Definisco il tipo di fascio
-! ==============================================================================
+! Definisco il tipo di fascio (caratteristiche particella e
+!    MADX beam command)
+exec, setBeam(APICLS009);
 
-! AM: set crazy energies, otherwise dispersion will be divided by beta_rel...
-beam, particle=proton, energy=1000, sequence=APICLS009;
-
-if ( is_carbon == 0 ) {
-  ! kicks of protons
-  A0=1;     ! []
-  Z0=1;     ! []
-  m0=PMASS; ! [GeV]
-} else {
-  ! kicks of carbon ions
-  A0=12;       ! []
-  Z0=6;        ! []
-  m0=A0*NMASS; ! [GeV]
-};
-Ek=115.23; ! [MeV/n] kinetic energy per nucleon
-
-! set some additional beam properties, i.e. gammaRel, betaGammaRel, betaRel
-!   and Brho based on Ek, A0, Z0, m0;
-exec, setRigidity();
+! end of template - DO NOT DELETE THIS LINE!
 
 ! ==============================================================================
 ! a simple example
 ! ==============================================================================
 
+! load desired optics
+call, file=kqinit30mmCarb.str;
+
+Ek=62.58434; ! [MeV/n] kinetic energy per nucleon
+Bp=30; ! [mm] Bragg peak depth
+
+! set some additional beam properties, i.e. gammaRel, betaGammaRel, betaRel
+!   and Brho based on Ek, A0, Z0, m0;
+exec, setRigidity();
+
 ! generate optics files
 use,sequence=APICLS009;
-exec, saveOpticsTFS(LineT);
-exec, saveGeometryTFS(LineT);
+exec, saveOptics(example);
+exec, saveStrengths(example);
+
+! ==============================================================================
+! specific tasks
+! NB: you can comment out all the part concerning the simple example
+! ==============================================================================
+
+! loop through .tfs file out of the repo with currents
+! call, file="loopThroughLGENFile.cmdx";
+
+! compute response matrices
+! call, file="compute_RM.cmdx";
+

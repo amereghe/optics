@@ -20,13 +20,13 @@ I2K_InjBump(): macro = {
     ! - Ibumper [A];
     ! - Brho [Tm];
     KBDI=-(2.62E-2*0.303/500.0)*Ibumper/Brho; ! both bumpers
-    KBDI_E=KBDI; ! bumper closing the bump (i.e. AFTER MSI)
-    KBDI_S=KBDI; ! bumper opening the bump (i.e. BEFORE MSI)
+    KBDI_E=KBDI; ! S3_012A_BDI, bumper closing the bump (i.e. AFTER MSI)
+    KBDI_S=KBDI; ! SD_012A_BDI, bumper opening the bump (i.e. BEFORE MSI)
     ! value, KBDI, KBDI_E, KBDI_S;
 };
 
 I2K_sextupoles_S6_SR: macro = {
-    ! S6 family
+    ! S6 family, P6-011A-LPOW, CNAO2
     ! input:
     ! - Is_SR [A];
     ! - Brho [Tm];
@@ -37,7 +37,7 @@ I2K_sextupoles_S6_SR: macro = {
 };
 
 I2K_sextupoles_S8_S1: macro = {
-    ! S8 family
+    ! S8 family, P6-013A-LPOW, EEI
     ! input:
     ! - Is_S1 [A];
     ! - Brho [Tm];
@@ -48,7 +48,7 @@ I2K_sextupoles_S8_S1: macro = {
 };
 
 I2K_sextupoles_S9_S0: macro = {
-    ! S9 family
+    ! S9 family, P6-014A-LPOW, CNAO2
     ! input:
     ! - Is_S0 [A];
     ! - Brho [Tm];
@@ -56,4 +56,45 @@ I2K_sextupoles_S9_S0: macro = {
     I_S0=Is_S0*Brho/1.14276;   ! [A]
     S0=-(I_S0/9.5003)/Brho;    ! [A], CPriano's spreadsheet: I[A]=9.5003*g[T/m2];
     ! value, Is_S0, I_S0, S0;
+};
+
+save_strengths_particular(): macro = {
+   print, TEXT="! quadrupole strengths [rad/m^2]";
+   value, KR;
+   value, KF;
+   value, KD;
+   value, KACQ;
+   value, KSKQ;
+   print, TEXT="";
+   print, TEXT="! sextupole strengths [rad/m^3]";
+   value, SR;
+   value, S1;
+   value, S0;
+   print, TEXT="";
+   print, TEXT="! injection bumpers [rad]";
+   value, KBDI_E;
+   value, KBDI_S;
+   PRINT, TEXT="";
+   print, TEXT="! horizontal orbit correctors [rad]";
+   value, HK_S0;
+   value, HK_S2;
+   value, HK_SC0;
+   value, HK_SC;
+   value, HK_SE;
+   value, HK_S4;
+   value, HK_S6;
+   value, HK_S80;
+   value, HK_S8;
+   value, HK_SA;
+   PRINT, TEXT="";
+   print, TEXT="! vertical orbit correctors [rad]";
+   value, VK_S1;
+   value, VK_S3;
+   value, VK_S5;
+   value, VK_S7;
+   value, VK_S9;
+   value, VK_SB;
+   value, VK_SD;
+   value, VK_SF;
+   assign, echo=terminal;
 };

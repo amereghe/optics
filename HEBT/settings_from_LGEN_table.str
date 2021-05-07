@@ -1,0 +1,238 @@
+! get settings directly from spreadsheet of LGEN
+
+! For every magnet MagName we have IMagName, KMagName and FMagName
+! eg. QH2_012A:
+! - IQH2_012A: current [A];
+! - KQH2_012A: kick [1/m^2];
+! - FQH2_012A: multiplication factor of K(I) (includes sign!)
+
+Ek=Ek_MeVN;  ! [MeV/n]
+BP=range_mm; ! [mm] 
+exec, setRigidity();
+
+! ==============================================================================
+! H2-H4
+! ==============================================================================
+
+IQH2_012A := P7_008A_LGEN_A;      !H8
+FQH2_012A := 1.0;     
+IQH2_016A := -P7_009A_LGEN_A;     !H9
+FQH2_016A := 1.0;  
+IQH2_022A := P7_010A_LGEN_A;      !H10
+FQH2_022A := 1.0;  
+!
+IQH4_003A := P7_011A_LGEN_A;      !H11
+FQH4_003A := 1.0;         
+IQH4_007A := -P7_012A_LGEN_A;     !H12     
+FQH4_007A := 1.0;          
+IQH4_013A := P7_013A_LGEN_A;      !H13
+FQH4_013A := 1.0;      
+
+if ( iMacro_I2K_QU==1 ) {
+   ! use macro: linear
+   exec, I2K_HEBT_QUs_lin(QH2_012A,Brho);
+   exec, I2K_HEBT_QUs_lin(QH2_016A,Brho);
+   exec, I2K_HEBT_QUs_lin(QH2_022A,Brho);
+   exec, I2K_HEBT_QUs_lin(QH4_003A,Brho);
+   exec, I2K_HEBT_QUs_lin(QH4_007A,Brho);
+   exec, I2K_HEBT_QUs_lin(QH4_013A,Brho);
+} elseif ( iMacro_I2K_QU==5 ) {
+   ! use macro: fifth order polynomial
+   exec, I2K_HEBT_QUs_fifth(QH2_012A,Brho);
+   exec, I2K_HEBT_QUs_fifth(QH2_016A,Brho);
+   exec, I2K_HEBT_QUs_fifth(QH2_022A,Brho);
+   exec, I2K_HEBT_QUs_fifth(QH4_003A,Brho);
+   exec, I2K_HEBT_QUs_fifth(QH4_007A,Brho);
+   exec, I2K_HEBT_QUs_fifth(QH4_013A,Brho);
+};
+
+! ==============================================================================
+! H5-V1
+! ==============================================================================
+
+if (iLine==3) {
+   !
+   IQV1_010A := -PA_008A_LGEN_A;     !V5  
+   FQV1_010A := 1.0;      
+   IQV1_014A := PA_009A_LGEN_A;      !V6    
+   FQV1_014A := 1.0;      
+   IQV1_018A := PA_010A_LGEN_A;      !V7   
+   FQV1_018A := 1.0;
+   IQV1_022A := -PA_011A_LGEN_A;     !V8   
+   FQV1_022A := 1.0;
+   !
+   if ( iMacro_I2K_QU==1 ) {
+      ! use macro: linear
+      exec, I2K_HEBT_QUs_lin(QV1_010A,Brho);
+      exec, I2K_HEBT_QUs_lin(QV1_014A,Brho);
+      exec, I2K_HEBT_QUs_lin(QV1_018A,Brho);
+      exec, I2K_HEBT_QUs_lin(QV1_022A,Brho);
+   } elseif ( iMacro_I2K_QU==5 ) {
+      ! use macro: fifth order polynomial
+      exec, I2K_HEBT_QUs_fifth(QV1_010A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QV1_014A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QV1_018A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QV1_022A,Brho);
+   };
+}else{
+   !
+   IQH5_005A := -P7_014A_LGEN_A;     !H14  
+   FQH5_005A := 1.0;      
+   IQH5_009A := P7_015A_LGEN_A;      !H15    
+   FQH5_009A := 1.0;      
+   IQH5_015A := -P7_016A_LGEN_A;     !H16   
+   FQH5_015A := 1.0;
+   !
+   if ( iMacro_I2K_QU==1 ) {
+      ! use macro: linear
+      exec, I2K_HEBT_QUs_lin(QH5_005A,Brho);
+      exec, I2K_HEBT_QUs_lin(QH5_009A,Brho);
+      exec, I2K_HEBT_QUs_lin(QH5_015A,Brho);
+   } elseif ( iMacro_I2K_QU==5 ) {
+      ! use macro: fifth order polynomial
+      exec, I2K_HEBT_QUs_fifth(QH5_005A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QH5_009A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QH5_015A,Brho);
+   };
+};
+
+! ==============================================================================
+! single ramifications
+! ==============================================================================
+
+if (iLine==1) {
+   !
+   IQT1_004A := P8_004A_LGEN_A;      !H36 
+   FQT1_004A := 1.0;      
+   IQT1_013A := -P8_005A_LGEN_A;     !H18
+   FQT1_013A := 1.0;    
+   IQT1_019A := P8_006A_LGEN_A;      !H19
+   FQT1_019A := 1.0;     
+   !
+   IQT2_005A := -P8_007A_LGEN_A;     !H20
+   FQT2_005A := 1.0;    
+   IQT2_012A := P8_008A_LGEN_A;      !H21
+   FQT2_012A := 1.0;
+   IQT2_018A := -P8_009A_LGEN_A;     !H22
+   FQT2_018A := 1.0;
+   !
+   if ( iMacro_I2K_QU==1 ) {
+      ! use macro: linear
+      exec, I2K_HEBT_QUs_lin(QT1_004A,Brho);
+      exec, I2K_HEBT_QUs_lin(QT1_013A,Brho);
+      exec, I2K_HEBT_QUs_lin(QT1_019A,Brho);
+      exec, I2K_HEBT_QUs_lin(QT2_005A,Brho);
+      exec, I2K_HEBT_QUs_lin(QT2_012A,Brho);
+      exec, I2K_HEBT_QUs_lin(QT2_018A,Brho);
+   } elseif ( iMacro_I2K_QU==5 ) {
+      ! use macro: fifth order polynomial
+      exec, I2K_HEBT_QUs_fifth(QT1_004A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QT1_013A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QT1_019A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QT2_005A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QT2_012A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QT2_018A,Brho);
+   };
+   !
+}elseif (iLine==2) {
+   !
+   IQU1_008A := P9_003A_LGEN_A;      !H23
+   FQU1_008A := 1.0;      
+   IQU1_014A := -P9_004A_LGEN_A;     !H24
+   FQU1_014A := 1.0;    
+   IQU1_018A := P9_005A_LGEN_A;      !H25
+   FQU1_018A := 1.0;     
+   !
+   IQU2_006A := -P9_006A_LGEN_A;     !H26
+   FQU2_006A := 1.0;    
+   IQU2_010A := P9_007A_LGEN_A;      !H27
+   FQU2_010A := 1.0;
+   IQU2_016A := -P9_008A_LGEN_A;     !H28
+   FQU2_016A := 1.0;
+   !
+   if ( iMacro_I2K_QU==1 ) {
+      ! use macro: linear
+      exec, I2K_HEBT_QUs_lin(QU1_008A,Brho);
+      exec, I2K_HEBT_QUs_lin(QU1_014A,Brho);
+      exec, I2K_HEBT_QUs_lin(QU1_018A,Brho);
+      exec, I2K_HEBT_QUs_lin(QU2_006A,Brho);
+      exec, I2K_HEBT_QUs_lin(QU2_010A,Brho);
+      exec, I2K_HEBT_QUs_lin(QU2_016A,Brho);
+   } elseif ( iMacro_I2K_QU==5 ) {
+      ! use macro: fifth order polynomial
+      exec, I2K_HEBT_QUs_fifth(QU1_008A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QU1_014A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QU1_018A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QU2_006A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QU2_010A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QU2_016A,Brho);
+   };
+   !
+}elseif (iLine==3) {
+   !
+   IQV1_037A := -PA_012A_LGEN_A;     !V9
+   FQV1_037A := 1.0;      
+   IQV1_041A := PA_013A_LGEN_A;      !V10
+   FQV1_041A := 1.0;    
+   IQV1_047A := -PA_014A_LGEN_A;     !V11
+   FQV1_047A := 1.0;     
+   !
+   IQV2_006A := PA_015A_LGEN_A;      !V12
+   FQV2_006A := 1.0;    
+   IQV2_010A := -PA_016A_LGEN_A;     !V13
+   FQV2_010A := 1.0;
+   IQV2_016A := PA_017A_LGEN_A;      !V14
+   FQV2_016A := 1.0;
+   !
+   if ( iMacro_I2K_QU==1 ) {
+      ! use macro: linear
+      exec, I2K_HEBT_QUs_lin(QV1_037A,Brho);
+      exec, I2K_HEBT_QUs_lin(QV1_041A,Brho);
+      exec, I2K_HEBT_QUs_lin(QV1_047A,Brho);
+      exec, I2K_HEBT_QUs_lin(QV2_006A,Brho);
+      exec, I2K_HEBT_QUs_lin(QV2_010A,Brho);
+      exec, I2K_HEBT_QUs_lin(QV2_016A,Brho);
+   } elseif ( iMacro_I2K_QU==5 ) {
+      ! use macro: fifth order polynomial
+      exec, I2K_HEBT_QUs_fifth(QV1_037A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QV1_041A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QV1_047A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QV2_006A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QV2_010A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QV2_016A,Brho);
+   };
+   !
+}elseif (iLine==4) {
+   !
+   IQZ1_004A := PB_004A_LGEN_A;      !H29 
+   FQZ1_004A := 1.0;      
+   IQZ1_013A := -PB_005A_LGEN_A;     !H30
+   FQZ1_013A := 1.0;    
+   IQZ1_019A := PB_006A_LGEN_A;      !H31
+   FQZ1_019A := 1.0;     
+   !
+   IQZ2_005A := -PB_007A_LGEN_A;     !H32
+   FQZ2_005A := 1.0;    
+   IQZ2_012A := PB_008A_LGEN_A;      !H34
+   FQZ2_012A := 1.0;
+   IQZ2_018A := -PB_009A_LGEN_A;     !H35
+   FQZ2_018A := 1.0;
+   !
+   if ( iMacro_I2K_QU==1 ) {
+      ! use macro: linear
+      exec, I2K_HEBT_QUs_lin(QZ1_004A,Brho);
+      exec, I2K_HEBT_QUs_lin(QZ1_013A,Brho);
+      exec, I2K_HEBT_QUs_lin(QZ1_019A,Brho);
+      exec, I2K_HEBT_QUs_lin(QZ2_005A,Brho);
+      exec, I2K_HEBT_QUs_lin(QZ2_012A,Brho);
+      exec, I2K_HEBT_QUs_lin(QZ2_018A,Brho);
+   } elseif ( iMacro_I2K_QU==5 ) {
+      ! use macro: fifth order polynomial
+      exec, I2K_HEBT_QUs_fifth(QZ1_004A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QZ1_013A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QZ1_019A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QZ2_005A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QZ2_012A,Brho);
+      exec, I2K_HEBT_QUs_fifth(QZ2_018A,Brho);
+   };
+};

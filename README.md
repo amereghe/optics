@@ -17,8 +17,10 @@ Extensions are given in alphabetical order
 | `.str`   | magnet strengths for a specific optics |
 
 ## Using an .xlsx file for ramp generation to set magnet strengths
-It is possible to get magnet settings directly from excel files used to generate the ramp functions - please have a look at e.g. `loopThroughGenRampFile.cmdx` and `settings_from_table.str` files in the `synchro` folder.
-You cannot use the `.xlsx` file as is - MADX won't crunch it correctly. Please remember to add a suitable header that MADX can use to properly treat the columns:
+It is possible to get magnet settings directly from excel files used to generate the ramp functions - please have a look at e.g. `loopThroughGenRampFile.cmdx` or `loopThroughLGENFile.cmdx`, and `settings_from_rampGen_table.str` or `settings_from_LGEN_table.str` files in the `synchro` folder.
+You cannot use the `.xlsx` file as is - MADX won't crunch it correctly. You can use the `makeTableFromOP.m` script or convert it by hand.
+
+In the latter case, please remember to add a suitable header that MADX can use to properly treat the columns:
 1. add a MADX (fake) header, e.g.
 ```
 @ TYPE             %05s "TWISS"

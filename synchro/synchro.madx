@@ -14,11 +14,18 @@ is_thin=0;
 ! 1: carbon optics
 is_carbon=1;
 
+! 0: TM
+! 1: RFKO
+mMode=0;
+
 title, "Sincrotrone CNAO";
 
 ! load macros:
 call, file="../macros.cmdx";
 call, file="macros.cmdx";
+
+! load common defs
+call, file="../common_defs.madx";
 
 ! LEGGO I PARAMETRI DEI VARI MAGNETI
 call, file="Magneti.str";
@@ -45,13 +52,9 @@ call, file="synchro.seq";
 !call, file="multipoli.str";
 !call, file="multipoli_2.str";
 
-
-! Definisco il tipo di fascio
-! AM: set crazy energies, otherwise dispersion will be divided by beta_rel...
-beam, particle=proton, energy=1000, sequence=MUXL;
-
-
-
+! Definisco il tipo di fascio (caratteristiche particella e
+!    MADX beam command)
+exec, setBeam(MUXL);
 
 !ridefinisco i K dei sestupoli
 call, file="sest.str";
@@ -61,18 +64,6 @@ call, file="install_missing.seq";
 
 ! AM: apertures
 call, file="synchro.aper";
-
-if ( is_carbon == 0 ) {
-  ! kicks of protons
-  A0=1;     ! []
-  Z0=1;     ! []
-  m0=PMASS; ! [GeV]
-} else {
-  ! kicks of carbon ions
-  A0=12;       ! []
-  Z0=6;        ! []
-  m0=A0*NMASS; ! [GeV]
-};
 
 ! ==============================================================================
 ! a simple example
@@ -96,11 +87,16 @@ exec, I2K_sextupoles_S9_S0(); ! input: Is_SR[A],Brho[Tm];
 use,sequence=MUXL;
 exec, saveOpticsTFS(extraction);
 exec, saveGeometryTFS(extraction);
+! save strengths
+exec, save_strengths(myOptics);
 
 ! ==============================================================================
 ! specific tasks
+! NB: you can comment out all the part concerning the simple example
 ! ==============================================================================
 
-! loop through .csv file out of an excel for generating magnet ramps
-! NB: you can comment out all the part concerning the simple example
-! call, file="loopThroughGenRampFile.cmdx";
+! loop through .txt file out of an excel for generating magnet ramps
+! call, file="loopThroughRampGenFile.cmdx";
+
+! loop through .tfs file out of the repo with currents
+! call, file="loopThroughLGENFile.cmdx";
