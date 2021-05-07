@@ -11,7 +11,8 @@ source="LGEN"; % source: RampGen or LGEN
 doVisualCheck=1; % perform some visual checks: 0=no, otherwise=yes; available only for LGEN source
 LGENsCheck=[]; % subset to check, otherwise all - eg [ "P6-006A-LGEN" "P6-007A-LGEN" "P6-008A-LGEN" "P6-009A-LGEN" ];
 filters=["NaN" "0"]; % filter PSs where all CyCo show "NaN" or "0"
-currentsOnly=1; % advice: synchro=0, HEBT=1
+currentsOnly=0; % advice: synchro=0, HEBT=1
+save2MADXtable=0;
 
 % processing
 beamPart=upper(beamPart);
@@ -245,9 +246,11 @@ switch source
         end
 
         if ( currentsOnly ~= 0 )
-            % SAVE FILE FOR MADX
-            isCurrent=1;
-            save2MADXTable(bigTable,psNames,MADXFileName,isCurrent);
+            if ( save2MADXtable ~= 0 )
+                % SAVE FILE FOR MADX
+                isCurrent=1;
+                save2MADXTable(bigTable,psNames,MADXFileName,isCurrent);
+            end
         else
             % convert currents into fields
             bigTableFields=zeros(nCyCodes,nPSs+3);
@@ -263,9 +266,11 @@ switch source
             if ( doVisualCheck ~= 0 )
                 visualCheck(LGENsCheck,psNames,bigTable,bigTableFields,bigTableKicks);
             end
-            % SAVE FILE FOR MADX
-            isCurrent=0;
-            save2MADXTable(bigTableKicks,psNames,MADXFileName,isCurrent);
+            if ( save2MADXtable ~= 0 )
+                % SAVE FILE FOR MADX
+                isCurrent=0;
+                save2MADXTable(bigTableKicks,psNames,MADXFileName,isCurrent);
+            end
         end
 
     otherwise
