@@ -12,24 +12,24 @@ is_open=1;
 
 ! 0: protons
 ! 1: carbon ions
-is_carbon=1;
+is_carbon=0;
 
 call, file="../macros.cmdx";
-! call, file=macros.cmdx;
-
-p_mass=0.93827204;
-p_energy=0.0071500;
+call, file="macros.cmdx";
 
 call, file="mebt.seq";
-call, file="k_quads.str";
-! call, file="k_Kicks.str";
 
-
-!Beam type definition
-beam, particle=proton, mass=p_mass, energy=p_mass+p_energy, sequence=MUXL;
+! Beam definition
+Ek=7.15; ! [MeV/n], kinetic energy per nucleon;
+exec, setBeam(MUXL);
+exec, setRigidity();
 
 ! load initial conditions
 call, file=start-conditions.opt;
+
+! call, file="k_quads.str";
+! call, file="k_Kicks.str";
+call, file="quads.str";
 
 ! ==============================================================================
 ! a simple example
@@ -52,3 +52,5 @@ plot, haxis=s, vaxis = x, y, symbol=2,file=figure,colour=100;
 use,sequence=MUXL;
 exec, saveAPIC();
 
+! saving strengths
+exec, save_strengths(MEBT);
