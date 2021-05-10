@@ -36,7 +36,7 @@ I2K_MEBT_CIBV(MagName,biro): macro {
   ! change sign: a negative horizontal B-field in measurements ref sys
   !    corresponds to a positive horizontal B-field in MADX, which kicks
   !    positively-charged particles towards y>0
-  VKICK_MagName :=-((-1.38E-4*IV_MagName + 1.53E-5)/biro)*abs(FV_MagName);
+  VKICK_MagName :=-((-1.38E-4*IV_MagName + 1.62E-5)/biro)*abs(FV_MagName);
 };
 
 save_strengths_particular(): macro {
@@ -51,4 +51,20 @@ save_strengths_particular(): macro {
    value, K_M3_010A_QIB;
    value, K_M3_019A_QIB;
    value, K_M3_021A_QIB;
+   print, TEXT="";
+   print, TEXT="! corrector kicks [rad]";
+   value, HKICK_M1_005A_CIB ;
+   value, VKICK_M1_005A_CIB ;
+   value, HKICK_M2_004A_CIB ;
+   value, VKICK_M2_004A_CIB ;
+   value, HKICK_M2_012A_CIB ;
+   value, VKICK_M2_012A_CIB ;
+   value, HKICK_M3_006A_CIB ;
+   value, VKICK_M3_006A_CIB ;
+   value, HKICK_M3_014A_CIB ;
+   value, VKICK_M3_014A_CIB ;
+   value, HKICK_M3_026A_CIB ;
+   value, VKICK_M3_026A_CIB ;
+   value, HKICK_M3_030B_CIB ;
+   value, VKICK_M3_030B_CIB ;
 };

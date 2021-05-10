@@ -1,8 +1,8 @@
 ! For every magnet MagName we have I_MagName, K_MagName and F_MagName
-! eg. QH2_012A:
-! - IQH2_012A: current [A];
-! - KQH2_012A: kick [1/m^2];
-! - FQH2_012A: multiplication factor of K(I) (includes sign!)
+! eg. M1_010A_QIB:
+! - I_M1_010A_QIB: current [A] (used with sign!);
+! - K_M1_010A_QIB: kick [1/m^2];
+! - F_M1_010A_QIB: multiplication factor of K(I) (only abs value is used!)
 
 Bro = Brho;
 
