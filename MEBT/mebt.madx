@@ -1,0 +1,57 @@
+! AM, 2021-05-07
+! template files from SSavazzi - they seem to come from MADbuilder...
+
+!Cycle Code - 060006cc0900
+!MAD Lattice - MEBT MADX - MEBT MADX
+Option, warn=true, info=true, echo=true;
+! assign, echo=output.out;
+
+! 0: closed beam line (ie a ring)
+! 1: open beam line
+is_open=1;
+
+! 0: protons
+! 1: carbon ions
+is_carbon=0;
+
+call, file="../macros.cmdx";
+call, file="macros.cmdx";
+
+call, file="mebt.seq";
+
+! Beam definition
+exec, setBeam(MUXL);
+Ek=7.15; ! [MeV/n], kinetic energy per nucleon;
+exec, setRigidity();
+
+! load initial conditions
+call, file=start-conditions.opt;
+
+! call, file="k_quads.str";
+! call, file="k_Kicks.str";
+call, file="quads.str";
+call, file="corrs.str";
+
+! ==============================================================================
+! a simple example
+! ==============================================================================
+
+! generate optics files
+use,sequence=MUXL;
+exec, saveOpticsTFS(example);
+exec, saveGeometryTFS(example);
+
+! plotting
+plot, haxis=s, vaxis = betx, bety, symbol=2,file=figure,colour=100;
+plot, haxis=s, vaxis = alfx, alfy, symbol=2,file=figure,colour=100;
+plot, haxis=s, vaxis = dx, dy, symbol=2,file=figure,colour=100;
+plot, haxis=s, vaxis = dpx, dpy, symbol=2,file=figure,colour=100;
+plot, haxis=s, vaxis = mux, muy, symbol=2,file=figure,colour=100;
+plot, haxis=s, vaxis = x, y, symbol=2,file=figure,colour=100;
+
+! apic
+use,sequence=MUXL;
+exec, saveAPIC();
+
+! saving strengths
+exec, save_strengths(MEBT);
