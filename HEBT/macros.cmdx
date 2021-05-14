@@ -132,6 +132,7 @@ saveStrengths(additional): macro={
 compute_RM_allCurrents(myMagName,myProperty,myI2K,fileName): macro={
    REMOVEFILE, FILE=fileName;
    exec, writeRMHeader(fileName);
+   F_myMagName=1.0;
    nEnLevel=NEnLevelstart;
    WHILE (nEnLevel <= NEnLevelstop ) {
       ! loop throuth LGEN data
@@ -140,20 +141,19 @@ compute_RM_allCurrents(myMagName,myProperty,myI2K,fileName): macro={
       call, file="settings_from_LGEN_table.str";
       
       ! notify user where we are
-      PRINTF, TEXT="==========================================================================================",VALUE=0.0;
+      PRINT, TEXT="==========================================================================================";
       PRINTF, TEXT="at Ek = %g MeV/u - BP = %g mm - row = %.0f ...", VALUE= Ek,BP,nEnLevel;
-      PRINTF, TEXT="==========================================================================================",VALUE=0.0;
+      PRINT, TEXT="==========================================================================================";
 
       ! loop through current values
       currI=Imin;
       while (currI<=Imax) {
 
-         imyMagName=currI;
-         kmyMagName_orig=myMagName->myProperty;
-         fmyMagName=1.0;
+         myProperty_myMagName_orig=myMagName->myProperty;
+         I_myMagName=currI;
          exec, myI2K(myMagName,Brho);
          ! value, myMagName->myProperty;
-         myMagName->myProperty=kmyMagName;
+         myMagName->myProperty=myProperty_myMagName;
          ! value, myMagName->myProperty;
          
          use,sequence=APICLS009;
@@ -161,12 +161,12 @@ compute_RM_allCurrents(myMagName,myProperty,myI2K,fileName): macro={
          twiss, beta0=initial;
 
          ! save data
-         kWrite=kmyMagName;
+         kWrite=myProperty_myMagName;
          exec, writeRMObservations(fileName);
 
          ! reset kick to original value
          ! value, myMagName->myProperty;
-         myMagName->myProperty=kmyMagName_orig;
+         myMagName->myProperty=myProperty_myMagName_orig;
          ! value, myMagName->myProperty;
 
          ! get ready for new point
