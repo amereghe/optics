@@ -1,24 +1,24 @@
 ! convert current into K, using a fifth order polynomial
 I2K_HEBT_QUs_fifth(MagName,biro) : macro {
   ! the macro expects IMagName, KMagName and FMagName to be defined
-  ! eg. QH2_012A -> IQH2_012A, KQH2_012A, FQH2_012A
-  KMagName = (-2.794551e-1
-               +9.32005e-2   *abs(IMagName)
-               -4.26890e-4   *abs(IMagName)^2
-               +3.498485e-6  *abs(IMagName)^3
-               -1.1996845e-8 *abs(IMagName)^4
-               +1.3348656E-11*abs(IMagName)^5) /biro *abs(FMagName);
-  if (IMagName<0){ KMagName=-KMagName; };
+  ! eg. H2_012A_QUE -> I_H2_012A_QUE, K1_H2_012A_QUE, F_H2_012A_QUE
+  K1_MagName = (-2.794551e-1
+                +9.32005e-2   *abs(IMagName)
+                -4.26890e-4   *abs(IMagName)^2
+                +3.498485e-6  *abs(IMagName)^3
+                -1.1996845e-8 *abs(IMagName)^4
+                +1.3348656E-11*abs(IMagName)^5) /biro *abs(F_MagName);
+  if (I_MagName<0){ K1_MagName=-K1_MagName; };
 };
 
 ! convert current into K, using a linear dependence
 I2K_HEBT_QUs_lin(MagName,biro) : macro {
   ! the macro expects IMagName, KMagName and FMagName to be defined
-  ! eg. QH2_012A -> IQH2_012A, KQH2_012A, FQH2_012A
+  ! eg. H2_012A_QUE -> I_H2_012A_QUE, K1_H2_012A_QUE, F_H2_012A_QUE
   ! gradiente integrato GL(T) = 3.258e-02 * I (A)
   ! lq = 0.45 m
   ! fromItoK = GL/(lq*Bro) 
-  KMagName := 0.03258/(0.45*biro) *IMagName *abs(FMagName);
+  K1_MagName := 0.03258/(0.45*biro) *I_MagName *abs(F_MagName);
 };
 
 I2K_HEBT_CEBH(MagName,biro): macro {
@@ -56,21 +56,21 @@ save_strengths_particular(): macro {
    value, K0MB;
    print, TEXT="";
    print, TEXT="! quadrupole strengths [rad/m^2]";
-   value, KQH2_012A;
-   value, KQH2_016A;
-   value, KQH2_022A;
-   value, KQH4_003A;
-   value, KQH4_007A;
-   value, KQH4_013A;
-   value, KQH5_005A;
-   value, KQH5_009A;
-   value, KQH5_015A;
-   value, KQT1_004A;
-   value, KQT1_013A;
-   value, KQT1_019A;
-   value, KQT2_005A;
-   value, KQT2_012A;
-   value, KQT2_018A;
+   value, K1_H2_012A_QUE;
+   value, K1_H2_016A_QUE;
+   value, K1_H2_022A_QUE;
+   value, K1_H4_003A_QUE;
+   value, K1_H4_007A_QUE;
+   value, K1_H4_013A_QUE;
+   value, K1_H5_005A_QUE;
+   value, K1_H5_009A_QUE;
+   value, K1_H5_015A_QUE;
+   value, K1_T1_004A_QUE;
+   value, K1_T1_013A_QUE;
+   value, K1_T1_019A_QUE;
+   value, K1_T2_005A_QUE;
+   value, K1_T2_012A_QUE;
+   value, K1_T2_018A_QUE;
 };
 
 parseTable(): macro={
