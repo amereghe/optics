@@ -115,7 +115,7 @@ setBeam(mySequence): macro = {
      ! protperties of carbon ions
      A0=12;           ! []
      Z0=6;            ! []
-     m0=A0*NMASS*1E3; ! [GeV]
+     m0=A0*NMASS*1E3; ! [MeV]
    };
 };
 
