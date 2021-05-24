@@ -30,7 +30,23 @@ call, file=start-conditions.opt;
 ! call, file="k_quads.str";
 ! call, file="k_Kicks.str";
 call, file="quads.str";
-call, file="corrs.str";
+! call, file="corrs.str";
+! IH_M3_026A_CIB_TM =  1.0;            ! M16-C, P5-103C-LGEN
+! IV_M3_026A_CIB_TM =  6.5;            ! M16-D, P5-103D-LGEN
+! IH_M3_030B_CIB_TM =  4.8;            ! M17-A, P5-104A-LGEN
+! IV_M3_030B_CIB_TM = -4.8;            ! M17-B, P5-104B-LGEN
+! FH_M3_026A_CIB    =  1.0;
+! FV_M3_026A_CIB    =  1.0;
+! FH_M3_030B_CIB    =  1.0;
+! FV_M3_030B_CIB    =  1.0;
+! IH_M3_026A_CIB = -0.77; ! +IH_M3_026A_CIB_TM; ! M16-C, P5-103C-LGEN
+! IH_M3_030B_CIB =  0.19; ! +IH_M3_030B_CIB_TM; ! M17-A, P5-104A-LGEN
+! IV_M3_026A_CIB =  0.00; ! +IV_M3_026A_CIB_TM; ! M16-D, P5-103D-LGEN
+! IV_M3_030B_CIB =  0.00; ! +IV_M3_030B_CIB_TM; ! M17-B, P5-104B-LGEN
+! exec, I2K_MEBT_CIBH(M3_026A_CIB,Brho) ;
+! exec, I2K_MEBT_CIBV(M3_026A_CIB,Brho) ;
+! exec, I2K_MEBT_CIBH(M3_030B_CIB,Brho) ;
+! exec, I2K_MEBT_CIBV(M3_030B_CIB,Brho) ;
 
 ! ==============================================================================
 ! a simple example

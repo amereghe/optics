@@ -1,13 +1,13 @@
 ! current loop
-Imin=-60.; ! [A]
-Imax=60.;  ! [A]
+Imin=-3.; ! [A]
+Imax=3.;  ! [A]
 ! Imax=-145.;  ! [A]
-Istep=10.;  ! [A]
+Istep=0.1;  ! [A]
 
 ! define all observations
 writeRMObservations(fileName): macro{
    assign, echo=fileName;
-   PRINTF, TEXT="% 19.12E,% 6.1f,% 12.5E,% 19.12E,% 19.12E,% 19.12E,% 19.12E,% 19.12E",
+   PRINTF, TEXT="% 19.12E % 6.1f % 12.5E % 19.12E % 19.12E % 19.12E % 19.12E % 19.12E",
            VALUE=Brho, BP, currI, kWrite,
            table(twiss,M3_044A_ESI,x), table(twiss,M3_044A_ESI,px),
            table(twiss,M3_044A_ESI,y), table(twiss,M3_044A_ESI,py);
