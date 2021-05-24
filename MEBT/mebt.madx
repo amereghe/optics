@@ -30,7 +30,7 @@ call, file=start-conditions.opt;
 ! call, file="k_quads.str";
 ! call, file="k_Kicks.str";
 call, file="quads.str";
-call, file="corrs.str";
+! call, file="corrs.str";
 
 ! ==============================================================================
 ! a simple example
@@ -56,11 +56,15 @@ exec, saveAPIC();
 ! saving strengths
 exec, save_strengths(MEBT);
 
+! saving Rmatrix
+use,sequence=MUXL;
+exec, saveRmatrixTFS(example);
+
 ! ==============================================================================
 ! specific tasks
 ! NB: you can comment out all the part concerning the simple example
 ! ==============================================================================
 
 ! compute response matrices
-call, file="compute_RM.cmdx";
+! call, file="compute_RM.cmdx";
 

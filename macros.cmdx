@@ -72,6 +72,30 @@ saveGeometryTFS(fileName): macro = {
    };
 };
 
+! save a .tfs file with main elements of R matrix, at centre of thick elements!
+! please specify if the sequence is in thin or thick lens (is_thin<>0).
+! in case of an open line (e.g. a transfer line, the gantry, etc...), use
+!    initial conditions to linear optics functions (flagged as initial).
+saveRmatrixTFS(fileName): macro = {
+   select,flag=twiss,clear;
+   select,flag=twiss,column=name,keyword,l,s,re11,re12,re21,re22,re16,re26,re33,re34,re43,re44,re51,re52,re55,re56,re66;
+   if (is_open<>0) {
+      ! a transfer line: we need the initial conditions
+      if (is_thin>0) {
+         twiss, rmatrix=true, centre=true, file=fileName_Rmatrix_thin.tfs, beta0=initial;
+      } else {
+         twiss, rmatrix=true, centre=true, file=fileName_Rmatrix.tfs, beta0=initial;
+      };
+   } else {
+      ! a ring: optics is computed as self-consisten solution
+      if (is_thin>0) {
+         twiss, rmatrix=true, centre=true, file=fileName_Rmatrix_thin.tfs;
+      } else {
+         twiss, rmatrix=true, centre=true, file=fileName_Rmatrix.tfs;
+      };
+   };
+};
+
 ! save an apic.txt file
 ! please specify if the sequence is in thin or thick lens (is_thin<>0).
 ! in case of an open line (e.g. a transfer line, the gantry, etc...), use

@@ -105,15 +105,19 @@ saveOptics(additional): macro={
   if (iLine==1) {
       exec, saveOpticsTFS(LineT_additional);
       exec, saveGeometryTFS(LineT_additional);
+      exec, saveRmatrixTFS(LineT_additional);
    }elseif (iLine==2) {
       exec, saveOpticsTFS(LineU_additional);
       exec, saveGeometryTFS(LineU_additional);
+      exec, saveRmatrixTFS(LineU_additional);
    }elseif (iLine==3) {
       exec, saveOpticsTFS(LineV_additional);
       exec, saveGeometryTFS(LineV_additional);
+      exec, saveRmatrixTFS(LineV_additional);
    }elseif (iLine==4) {
       exec, saveOpticsTFS(LineZ_additional);
       exec, saveGeometryTFS(LineZ_additional);
+      exec, saveRmatrixTFS(LineZ_additional);
    };
 };
 
