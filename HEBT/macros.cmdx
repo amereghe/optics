@@ -1,45 +1,45 @@
 ! convert current into K, using a fifth order polynomial
 I2K_HEBT_QUs_fifth(MagName,biro) : macro {
   ! the macro expects IMagName, KMagName and FMagName to be defined
-  ! eg. QH2_012A -> IQH2_012A, KQH2_012A, FQH2_012A
-  KMagName = (-2.794551e-1
-               +9.32005e-2   *abs(IMagName)
-               -4.26890e-4   *abs(IMagName)^2
-               +3.498485e-6  *abs(IMagName)^3
-               -1.1996845e-8 *abs(IMagName)^4
-               +1.3348656E-11*abs(IMagName)^5) /biro *abs(FMagName);
-  if (IMagName<0){ KMagName=-KMagName; };
+  ! eg. H2_012A_QUE -> I_H2_012A_QUE, K1_H2_012A_QUE, F_H2_012A_QUE
+  K1_MagName = (-2.794551e-1
+                +9.32005e-2   *abs(IMagName)
+                -4.26890e-4   *abs(IMagName)^2
+                +3.498485e-6  *abs(IMagName)^3
+                -1.1996845e-8 *abs(IMagName)^4
+                +1.3348656E-11*abs(IMagName)^5) /biro *abs(F_MagName);
+  if (I_MagName<0){ K1_MagName=-K1_MagName; };
 };
 
 ! convert current into K, using a linear dependence
 I2K_HEBT_QUs_lin(MagName,biro) : macro {
   ! the macro expects IMagName, KMagName and FMagName to be defined
-  ! eg. QH2_012A -> IQH2_012A, KQH2_012A, FQH2_012A
+  ! eg. H2_012A_QUE -> I_H2_012A_QUE, K1_H2_012A_QUE, F_H2_012A_QUE
   ! gradiente integrato GL(T) = 3.258e-02 * I (A)
   ! lq = 0.45 m
   ! fromItoK = GL/(lq*Bro) 
-  KMagName := 0.03258/(0.45*biro) *IMagName *abs(FMagName);
+  K1_MagName := 0.03258/(0.45*biro) *I_MagName *abs(F_MagName);
 };
 
 I2K_HEBT_CEBH(MagName,biro): macro {
   ! from SSavazzi, relation for MADbuilder
-  ! the macro expects IMagName, KMagName and FMagName to be defined
+  ! the macro expects I_MagName, HKICK_MagName and F_MagName to be defined
   ! Lmag=0.52m;
-  ! KMagName := ((2.615E-5-3.385E-4*IMagName)/biro*0.52)*abs(FMagName);
+  ! HKICK_MagName := ((2.615E-5-3.385E-4*I_MagName)/biro*0.52)*abs(F_MagName);
   !
   ! Magnetic Measurements doc, 2007, performed on prototype
   ! S:\Accelerating-System\Magnets\Magnetic Measurements\Frascati\HEBT\Documenti_misure_e_immagini\Correttori
   ! BLh[Tm]=-1.76 10-4 * I [A] + 1.36 10-5
   ! change sign: a negative vertical B-field (in both ref systems, i.e.
   !    measurements and MADX) kicks positively-charged particles towards x>0 in MADX
-  KMagName :=-((-1.76E-4*IMagName + 1.36E-5)/biro)*abs(FMagName);
+  HKICK_MagName :=-((-1.76E-4*I_MagName + 1.36E-5)/biro)*abs(F_MagName);
 };
 
 I2K_HEBT_CEBV(MagName,biro): macro {
   ! from SSavazzi, relation for MADbuilder
-  ! the macro expects IMagName, KMagName and FMagName to be defined
+  ! the macro expects I_MagName, VKICK_MagName and F_MagName to be defined
   ! Lmag=0.52m;
-  ! KMagName := ((2.981E-5-3.385E-4*IMagName)/biro*0.52)*abs(FMagName);
+  ! VKICK_MagName := ((2.981E-5-3.385E-4*I_MagName)/biro*0.52)*abs(F_MagName);
   !
   ! Magnetic Measurements doc, 2007, performed on prototype
   ! S:\Accelerating-System\Magnets\Magnetic Measurements\Frascati\HEBT\Documenti_misure_e_immagini\Correttori
@@ -47,7 +47,7 @@ I2K_HEBT_CEBV(MagName,biro): macro {
   ! change sign: a negative horizontal B-field in measurements ref sys
   !    corresponds to a positive horizontal B-field in MADX, which kicks
   !    positively-charged particles towards y>0
-  KMagName :=-((-1.76E-4*IMagName + 1.55E-5)/biro)*abs(FMagName);
+  VKICK_MagName :=-((-1.76E-4*I_MagName + 1.55E-5)/biro)*abs(F_MagName);
 };
 
 save_strengths_particular(): macro {
@@ -56,21 +56,21 @@ save_strengths_particular(): macro {
    value, K0MB;
    print, TEXT="";
    print, TEXT="! quadrupole strengths [rad/m^2]";
-   value, KQH2_012A;
-   value, KQH2_016A;
-   value, KQH2_022A;
-   value, KQH4_003A;
-   value, KQH4_007A;
-   value, KQH4_013A;
-   value, KQH5_005A;
-   value, KQH5_009A;
-   value, KQH5_015A;
-   value, KQT1_004A;
-   value, KQT1_013A;
-   value, KQT1_019A;
-   value, KQT2_005A;
-   value, KQT2_012A;
-   value, KQT2_018A;
+   value, K1_H2_012A_QUE;
+   value, K1_H2_016A_QUE;
+   value, K1_H2_022A_QUE;
+   value, K1_H4_003A_QUE;
+   value, K1_H4_007A_QUE;
+   value, K1_H4_013A_QUE;
+   value, K1_H5_005A_QUE;
+   value, K1_H5_009A_QUE;
+   value, K1_H5_015A_QUE;
+   value, K1_T1_004A_QUE;
+   value, K1_T1_013A_QUE;
+   value, K1_T1_019A_QUE;
+   value, K1_T2_005A_QUE;
+   value, K1_T2_012A_QUE;
+   value, K1_T2_018A_QUE;
 };
 
 parseTable(): macro={
@@ -132,6 +132,7 @@ saveStrengths(additional): macro={
 compute_RM_allCurrents(myMagName,myProperty,myI2K,fileName): macro={
    REMOVEFILE, FILE=fileName;
    exec, writeRMHeader(fileName);
+   F_myMagName=1.0;
    nEnLevel=NEnLevelstart;
    WHILE (nEnLevel <= NEnLevelstop ) {
       ! loop throuth LGEN data
@@ -140,20 +141,19 @@ compute_RM_allCurrents(myMagName,myProperty,myI2K,fileName): macro={
       call, file="settings_from_LGEN_table.str";
       
       ! notify user where we are
-      PRINTF, TEXT="==========================================================================================",VALUE=0.0;
+      PRINT, TEXT="==========================================================================================";
       PRINTF, TEXT="at Ek = %g MeV/u - BP = %g mm - row = %.0f ...", VALUE= Ek,BP,nEnLevel;
-      PRINTF, TEXT="==========================================================================================",VALUE=0.0;
+      PRINT, TEXT="==========================================================================================";
 
       ! loop through current values
       currI=Imin;
       while (currI<=Imax) {
 
-         imyMagName=currI;
-         kmyMagName_orig=myMagName->myProperty;
-         fmyMagName=1.0;
+         myProperty_myMagName_orig=myMagName->myProperty;
+         I_myMagName=currI;
          exec, myI2K(myMagName,Brho);
          ! value, myMagName->myProperty;
-         myMagName->myProperty=kmyMagName;
+         myMagName->myProperty=myProperty_myMagName;
          ! value, myMagName->myProperty;
          
          use,sequence=APICLS009;
@@ -161,12 +161,12 @@ compute_RM_allCurrents(myMagName,myProperty,myI2K,fileName): macro={
          twiss, beta0=initial;
 
          ! save data
-         kWrite=kmyMagName;
+         kWrite=myProperty_myMagName;
          exec, writeRMObservations(fileName);
 
          ! reset kick to original value
          ! value, myMagName->myProperty;
-         myMagName->myProperty=kmyMagName_orig;
+         myMagName->myProperty=myProperty_myMagName_orig;
          ! value, myMagName->myProperty;
 
          ! get ready for new point
