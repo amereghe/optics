@@ -1,0 +1,33 @@
+! current loop
+Imin=-60.; ! [A]
+Imax=60.;  ! [A]
+! Imax=-145.;  ! [A]
+Istep=10.;  ! [A]
+
+! define all observations
+writeRMObservations(fileName): macro{
+   assign, echo=fileName;
+   PRINTF, TEXT="% 19.12E,% 6.1f,% 12.5E,% 19.12E,% 19.12E,% 19.12E,% 19.12E,% 19.12E",
+           VALUE=Brho, BP, currI, kWrite,
+           table(twiss,M3_044A_ESI,x), table(twiss,M3_044A_ESI,px),
+           table(twiss,M3_044A_ESI,y), table(twiss,M3_044A_ESI,py);
+   assign, echo=terminal;
+};
+! HKICKs
+! a useful header to file written by writeRMObservations(fileName) macro
+writeRMHeader(fileName): macro{
+   assign, echo=fileName;
+   PRINT, TEXT="# Brho[Tm], BP[mm], I[A], HKICK[rad], X:M3_044A_ESI[m], PX:M3_044A_ESI[], Y:M3_044A_ESI[m], PY:M3_044A_ESI[]";
+   assign, echo=terminal;
+};
+exec, compute_RM_allCurrents(M3_026A_CIB,HKICK_M3_026A_CIB,IH_M3_026A_CIB,FH_M3_026A_CIB,HKICK,I2K_MEBT_CIBH,M3_026A_CIB__HKICK__RM.tfs);
+exec, compute_RM_allCurrents(M3_030B_CIB,HKICK_M3_030B_CIB,IH_M3_030B_CIB,FH_M3_030B_CIB,HKICK,I2K_MEBT_CIBH,M3_030B_CIB__HKICK__RM.tfs);
+! VKICKs
+! a useful header to file written by writeRMObservations(fileName) macro
+writeRMHeader(fileName): macro{
+   assign, echo=fileName;
+   PRINT, TEXT="# Brho[Tm], BP[mm], I[A], VKICK[rad], X:M3_044A_ESI[m], PX:M3_044A_ESI[], Y:M3_044A_ESI[m], PY:M3_044A_ESI[]";
+   assign, echo=terminal;
+};
+exec, compute_RM_allCurrents(M3_026A_CIB,VKICK_M3_026A_CIB,IV_M3_026A_CIB,FV_M3_026A_CIB,VKICK,I2K_MEBT_CIBV,M3_026A_CIB__VKICK__RM.tfs);
+exec, compute_RM_allCurrents(M3_030B_CIB,VKICK_M3_030B_CIB,IV_M3_030B_CIB,FV_M3_030B_CIB,VKICK,I2K_MEBT_CIBV,M3_030B_CIB__VKICK__RM.tfs);

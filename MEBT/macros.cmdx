@@ -3,11 +3,11 @@
 I2K_MEBT_QUs_third(MagName,biro) : macro {
   ! the macro expects I_MagName, K_MagName and F_MagName to be defined
   ! eg. M1_010A_QIB -> I_M1_010A_QIB, K_M1_010A_QIB, F_M1_010A_QIB
-  K_MagName = ( 4.37087e-2
-              +6.804791e-2   *abs(I_MagName)
-              +1.898403e-5   *abs(I_MagName)^2
-              -9.8237885E-08 *abs(I_MagName)^3) /biro *abs(F_MagName);
-  if (I_MagName<0){ K_MagName=-K_MagName; };
+  K1_MagName = ( 4.37087e-2
+                +6.804791e-2   *abs(I_MagName)
+                +1.898403e-5   *abs(I_MagName)^2
+                -9.8237885E-08 *abs(I_MagName)^3) /biro *abs(F_MagName);
+  if (I_MagName<0){ K1_MagName=-K1_MagName; };
 };
 
 I2K_MEBT_CIBH(MagName,biro): macro {
@@ -42,15 +42,15 @@ I2K_MEBT_CIBV(MagName,biro): macro {
 save_strengths_particular(): macro {
    print, TEXT="";
    print, TEXT="! quadrupole strengths [rad/m^2]";
-   value, K_M1_010A_QIB;
-   value, K_M1_012A_QIB;
-   value, K_M1_014A_QIB;
-   value, K_M1_016A_QIB;
-   value, K_M2_009A_QIB;
-   value, K_M3_008A_QIB;
-   value, K_M3_010A_QIB;
-   value, K_M3_019A_QIB;
-   value, K_M3_021A_QIB;
+   value, K1_M1_010A_QIB;
+   value, K1_M1_012A_QIB;
+   value, K1_M1_014A_QIB;
+   value, K1_M1_016A_QIB;
+   value, K1_M2_009A_QIB;
+   value, K1_M3_008A_QIB;
+   value, K1_M3_010A_QIB;
+   value, K1_M3_019A_QIB;
+   value, K1_M3_021A_QIB;
    print, TEXT="";
    print, TEXT="! corrector kicks [rad]";
    value, HKICK_M1_005A_CIB ;
@@ -67,4 +67,39 @@ save_strengths_particular(): macro {
    value, VKICK_M3_026A_CIB ;
    value, HKICK_M3_030B_CIB ;
    value, VKICK_M3_030B_CIB ;
+};
+
+compute_RM_allCurrents(myMagName,myKName,myIName,myFName,myProperty,myI2K,fileName): macro={
+   REMOVEFILE, FILE=fileName;
+   exec, writeRMHeader(fileName);
+   
+   ! loop through current values
+   currI=Imin;
+   while (currI<=Imax) {
+
+      myIName=currI;
+      myProperty_orig=myMagName->myProperty;
+      myFName=1.0;
+      exec, myI2K(myMagName,Brho);
+      ! value, myMagName->myProperty;
+      myMagName->myProperty=myKName;
+      ! value, myMagName->myProperty;
+      
+      use,sequence=MUXL;
+      select,flag=twiss,clear;
+      twiss, beta0=initial;
+
+      ! save data
+      kWrite=myKName;
+      exec, writeRMObservations(fileName);
+
+      ! reset kick to original value
+      ! value, myMagName->myProperty;
+      myMagName->myProperty=myProperty_orig;
+      ! value, myMagName->myProperty;
+
+      ! get ready for new point
+      currI=currI+Istep;
+      
+  };
 };

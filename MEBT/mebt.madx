@@ -55,3 +55,12 @@ exec, saveAPIC();
 
 ! saving strengths
 exec, save_strengths(MEBT);
+
+! ==============================================================================
+! specific tasks
+! NB: you can comment out all the part concerning the simple example
+! ==============================================================================
+
+! compute response matrices
+call, file="compute_RM.cmdx";
+
