@@ -12,11 +12,15 @@ is_thin=0;
 
 ! 0: proton optics
 ! 1: carbon optics
-is_carbon=1;
+is_carbon=0;
 
 ! 0: TM
 ! 1: RFKO
 mMode=0;
+
+! 0: injection
+! 1: FT
+mSetPoint=0;
 
 title, "Sincrotrone CNAO";
 
