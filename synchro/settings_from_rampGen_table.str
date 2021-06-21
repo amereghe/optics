@@ -2,7 +2,7 @@
 ! NB: optics with 10-bumpers for orbit at extraction septum
 ! S3_012A_BDI and SD_012A_BDI are set by Ibumper;
 
-BP=BP_mm;
+BP=BPmm;
 
 if ( mSetPoint==0 ) {
    ! injection optics
@@ -36,11 +36,11 @@ if ( mSetPoint==0 ) {
    HK_SC  = SC_21Acc*1.0E-03; ! SC_021A_CSH, [rad]
    HK_SE  = SE_16Acc*1.0E-03; ! SE_016A_CSH, [rad]
    ! - additional 5-bumpers (hor bump at extraction septum)
-   HK_S4  = S4_08Acc*1.0E-03; ! S4_008A_CSH, [rad]
-   HK_S6  = S6_14Acc*1.0E-03; ! S6_014A_CSH, [rad]
-   HK_S80 = S8_08Acc*1.0E-03; ! S8_008A_CSH, [rad]
-   HK_S8  = S8_35Acc*1.0E-03; ! S8_035A_CSH, [rad]
-   HK_SA  = SA_08Acc*1.0E-03; ! SA_008A_CSH, [rad]
+   ! HK_S4  = S4_08Acc*1.0E-03; ! S4_008A_CSH, [rad]
+   ! HK_S6  = S6_14Acc*1.0E-03; ! S6_014A_CSH, [rad]
+   ! HK_S80 = S8_08Acc*1.0E-03; ! S8_008A_CSH, [rad]
+   ! HK_S8  = S8_35Acc*1.0E-03; ! S8_035A_CSH, [rad]
+   ! HK_SA  = SA_08Acc*1.0E-03; ! SA_008A_CSH, [rad]
 
 }else{
    ! extraction optics
