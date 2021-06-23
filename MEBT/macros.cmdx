@@ -3,11 +3,13 @@
 I2K_MEBT_QUs_third(MagName,biro) : macro {
   ! the macro expects I_MagName, K_MagName and F_MagName to be defined
   ! eg. M1_010A_QIB -> I_M1_010A_QIB, K_M1_010A_QIB, F_M1_010A_QIB
-  K1_MagName = ( 4.37087e-2
-                +6.804791e-2   *abs(I_MagName)
-                +1.898403e-5   *abs(I_MagName)^2
-                -9.8237885E-08 *abs(I_MagName)^3) /biro *abs(F_MagName);
-  if (I_MagName<0){ K1_MagName=-K1_MagName; };
+  if ( I_MagName <> 0.0 ) {
+     K1_MagName = ( 4.37087e-2
+                   +6.804791e-2   *abs(I_MagName)
+                   +1.898403e-5   *abs(I_MagName)^2
+                   -9.8237885E-08 *abs(I_MagName)^3) /biro *abs(F_MagName);
+     if (I_MagName<0){ K1_MagName=-K1_MagName; };
+  };
 };
 
 I2K_MEBT_CIBH(MagName,biro): macro {
@@ -21,7 +23,9 @@ I2K_MEBT_CIBH(MagName,biro): macro {
   ! BLh[Tm]=-1.38 10-4 * I [A] + 1.53 10-5
   ! change sign: a negative vertical B-field (in both ref systems, i.e.
   !    measurements and MADX) kicks positively-charged particles towards x>0 in MADX
-  HKICK_MagName :=-((-1.38E-4*IH_MagName + 1.53E-5)/biro)*abs(FH_MagName);
+  if ( IH_MagName <> 0.0 ) {
+     HKICK_MagName :=-((-1.38E-4*IH_MagName + 1.53E-5)/biro)*abs(FH_MagName);
+  };
 };
 
 I2K_MEBT_CIBV(MagName,biro): macro {
@@ -36,7 +40,9 @@ I2K_MEBT_CIBV(MagName,biro): macro {
   ! change sign: a negative horizontal B-field in measurements ref sys
   !    corresponds to a positive horizontal B-field in MADX, which kicks
   !    positively-charged particles towards y>0
-  VKICK_MagName :=-((-1.38E-4*IV_MagName + 1.62E-5)/biro)*abs(FV_MagName);
+  if ( IV_MagName <> 0.0 ) {
+     VKICK_MagName :=-((-1.38E-4*IV_MagName + 1.62E-5)/biro)*abs(FV_MagName);
+  };
 };
 
 save_strengths_particular(): macro {
