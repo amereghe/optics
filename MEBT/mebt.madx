@@ -14,6 +14,9 @@ is_open=1;
 ! 1: carbon ions
 is_carbon=0;
 
+! excess IDB kicks: 0: do not use; 1: use;
+i_IDB_excess=1;
+
 call, file="../macros.cmdx";
 call, file="macros.cmdx";
 
@@ -21,16 +24,35 @@ call, file="mebt.seq";
 
 ! Beam definition
 exec, setBeam(MUXL);
-Ek=7.15; ! [MeV/n], kinetic energy per nucleon;
+if ( is_carbon==0 ) {
+   ! proton
+   Ek=7.18; ! [MeV/n], kinetic energy per nucleon;
+}else{
+   ! carbon ion
+   Ek=7.134663; ! [MeV/n], kinetic energy per nucleon;
+};
 exec, setRigidity();
 
 ! load initial conditions
-call, file=start-conditions.opt;
+! call, file=start-conditions.opt;
+call, file=start-conditions_matlab.opt;
 
 ! call, file="k_quads.str";
 ! call, file="k_Kicks.str";
 call, file="quads.str";
-! call, file="corrs.str";
+call, file="corrs.str";
+! IH_M3_026A_CIB := -17.33;            ! M16-C, P5-103C-LGEN
+! IH_M3_030B_CIB :=  17.21;            ! M17-A, P5-104A-LGEN
+! IV_M3_026A_CIB := -12.90;            ! M16-D, P5-103D-LGEN
+! IV_M3_030B_CIB :=   5.46;            ! M17-B, P5-104B-LGEN
+! FH_M3_026A_CIB :=  1.0;
+! FV_M3_026A_CIB :=  1.0;
+! FH_M3_030B_CIB :=  1.0;
+! FV_M3_030B_CIB :=  1.0;
+! exec, I2K_MEBT_CIBH(M3_026A_CIB,Bro) ;
+! exec, I2K_MEBT_CIBH(M3_030B_CIB,Bro) ;
+! exec, I2K_MEBT_CIBV(M3_026A_CIB,Bro) ;
+! exec, I2K_MEBT_CIBV(M3_030B_CIB,Bro) ;
 
 ! ==============================================================================
 ! a simple example
@@ -68,3 +90,4 @@ exec, saveRmatrixTFS(example);
 ! compute response matrices
 ! call, file="compute_RM.cmdx";
 
+value, Brho;
