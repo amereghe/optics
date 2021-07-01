@@ -17,6 +17,11 @@ is_carbon=0;
 ! excess IDB kicks: 0: do not use; 1: use;
 i_IDB_excess=1;
 
+! consider extensions:
+! 0: no extensions
+! 1: extension on the LINAC side
+is_extended=1;
+
 call, file="../macros.cmdx";
 call, file="macros.cmdx";
 
