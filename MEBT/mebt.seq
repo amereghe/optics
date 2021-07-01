@@ -14,7 +14,7 @@ ESI_LENGTH=0.6;         ! [m]
 
 if ( is_extended>0 ) {
    ! from the LINAC sequence
-   LN_012B_GPM: MONITOR, L=0.0;
+   LN_012B_PIB: MONITOR, L=0.0;
 };
 M1_001A_DRI: DRIFT, L= 0.11;
 M1_001B_GFC: DRIFT, L= 0;
@@ -176,7 +176,7 @@ Lseq=Lseq+Ladd_up;
 
 muxl: sequence, l = Lseq;
 if ( is_extended>0 ) {
-   LN_012B_GPM, at = 0.0; ! just add LN_012_GPM as 0-length MONITOR
+   LN_012B_PIB, at = 0.0; ! just add LN_012_GPM as 0-length MONITOR
 };
 M1_001B_GFC, at = 0.11+Ladd_up;
 M1_002A_VVM, at = 0.245+Ladd_up;
