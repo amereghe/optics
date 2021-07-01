@@ -2,10 +2,8 @@
 IDB_ANGLE=0.7330382858;   ! [rad]
 IDB_LENGTH=1.382;         ! [m]
 if ( i_IDB_excess<>0 ) {
-  ! IDB_excess_angle01=10.7E-3; ! [rad]
-  ! IDB_excess_angle02=11.7E-3; ! [rad]
-  IDB_excess_angle01=8.27E-3; ! [rad]
-  IDB_excess_angle02=14.2E-3; ! [rad]
+  IDB_excess_angle01=11.74E-3; ! [rad]
+  IDB_excess_angle02=10.78E-3; ! [rad]
 };
 ! IMSs
 IMS_ANGLE=0.25;         ! [rad]
