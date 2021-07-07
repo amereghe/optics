@@ -58,18 +58,6 @@ if ( i_start_cond<0 ) {
 ! call, file="k_Kicks.str";
 call, file="quads.str";
 call, file="corrs.str";
-! IH_M3_026A_CIB := -17.33;            ! M16-C, P5-103C-LGEN
-! IH_M3_030B_CIB :=  17.21;            ! M17-A, P5-104A-LGEN
-! IV_M3_026A_CIB := -12.90;            ! M16-D, P5-103D-LGEN
-! IV_M3_030B_CIB :=   5.46;            ! M17-B, P5-104B-LGEN
-! FH_M3_026A_CIB :=  1.0;
-! FV_M3_026A_CIB :=  1.0;
-! FH_M3_030B_CIB :=  1.0;
-! FV_M3_030B_CIB :=  1.0;
-! exec, I2K_MEBT_CIBH(M3_026A_CIB,Bro) ;
-! exec, I2K_MEBT_CIBH(M3_030B_CIB,Bro) ;
-! exec, I2K_MEBT_CIBV(M3_026A_CIB,Bro) ;
-! exec, I2K_MEBT_CIBV(M3_030B_CIB,Bro) ;
 
 ! ==============================================================================
 ! a simple example
@@ -106,5 +94,3 @@ exec, saveRmatrixTFS(example);
 
 ! compute response matrices
 ! call, file="compute_RM.cmdx";
-
-value, Brho;
