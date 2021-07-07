@@ -20,7 +20,10 @@ i_IDB_excess=1;
 ! consider extensions:
 ! 0: no extensions
 ! 1: extension on the LINAC side
-is_extended=1;
+is_extended=0;
+
+! which I2K to use for quads?
+I2K_quads=1; ! 1: linear, personal; 3: third order polynom
 
 call, file="../macros.cmdx";
 call, file="macros.cmdx";

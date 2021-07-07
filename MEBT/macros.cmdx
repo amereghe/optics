@@ -1,6 +1,7 @@
 ! convert current into K, using a third order polynomial
 ! as from MADbuilder
 I2K_MEBT_QUs_third(MagName,biro) : macro {
+  ! third order polynom as from measurements at Frascati
   ! the macro expects I_MagName, K_MagName and F_MagName to be defined
   ! eg. M1_010A_QIB -> I_M1_010A_QIB, K_M1_010A_QIB, F_M1_010A_QIB
   if ( I_MagName <> 0.0 ) {
@@ -12,6 +13,7 @@ I2K_MEBT_QUs_third(MagName,biro) : macro {
   };
 };
 I2K_MEBT_QUs_lin(MagName,biro) : macro {
+  ! linear dependence as from magnetic measurements on each quad
   ! the macro expects I_MagName, K_MagName and F_MagName to be defined
   ! eg. M1_010A_QIB -> I_M1_010A_QIB, K_M1_010A_QIB, F_M1_010A_QIB
   if ( I_MagName <> 0.0 ) {
