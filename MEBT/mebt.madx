@@ -35,7 +35,7 @@ call, file="quads.str";
 ! ==============================================================================
 ! a simple example
 ! ==============================================================================
-
+/*
 ! generate optics files
 use,sequence=MUXL;
 exec, saveOpticsTFS(example);
@@ -59,7 +59,7 @@ exec, save_strengths(MEBT);
 ! saving Rmatrix
 use,sequence=MUXL;
 exec, saveRmatrixTFS(example);
-
+*/
 ! ==============================================================================
 ! specific tasks
 ! NB: you can comment out all the part concerning the simple example
@@ -68,3 +68,4 @@ exec, saveRmatrixTFS(example);
 ! compute response matrices
 ! call, file="compute_RM.cmdx";
 
+call, file="reproduce_MEBT_scans.cmdx";
